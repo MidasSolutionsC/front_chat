@@ -31,7 +31,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'Skote' }, { label: 'Chat', active: true }];
+    this.breadCrumbItems = [{ label: 'Midas SC' }, { label: 'Chat', active: true }];
 
     this.formData = this.formBuilder.group({
       message: ['', [Validators.required]],
@@ -70,7 +70,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   chatUsername(name) {
     this.username = name;
-    this.usermessage = 'Hello';
+    this.usermessage = 'Hola';
     this.chatMessagesData = [];
     const currentDate = new Date();
 

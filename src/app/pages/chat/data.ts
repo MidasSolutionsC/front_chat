@@ -1,47 +1,47 @@
 const chatData = [
     {
         image: 'assets/images/users/avatar-2.jpg',
-        name: 'Judith Relux',
-        message: 'Hey! there I\'m available',
+        name: 'Jordin Relux',
+        message: '¡Ey! ahí estoy disponible',
         time: '05 min',
         color: 'secondary'
     },
     {
         image: 'assets/images/users/avatar-3.jpg',
-        name: 'Adam Miller',
-        message: 'I\'ve finished it! See you so',
+        name: 'Rosendo Sigueñas',
+        message: '¡Lo he terminado! Nos vemos de aqui',
         time: '12 min',
         color: 'success'
     },
     {
-        name: 'Keith Gonzales',
-        message: 'This theme is awesome!',
+        name: 'Miriam Gonzales',
+        message: '¡Este tema es increíble!',
         time: '24 min',
         color: 'success'
     },
     {
         image: 'assets/images/users/avatar-4.jpg',
-        name: 'Jose Vickery',
-        message: 'Nice to meet you',
+        name: 'Mailis Carrillo',
+        message: 'Mucho Gusto',
         time: '1 hr',
         color: 'warning'
     },
     {
-        name: 'Mitchel Givens',
-        message: 'Hey! there I\'m available',
+        name: 'Mitchel Rivera',
+        message: '¡Ey!  estoy disponible',
         time: '3 hrs',
         color: 'secondary'
     },
     {
         image: 'assets/images/users/avatar-4.jpg',
-        name: 'Stephen Hadley',
-        message: 'I\'ve finished it! See you so',
+        name: 'Alberto Rojas',
+        message: '¡Lo he terminado! Nos vemos',
         time: '5 hrs',
         color: 'success'
     },
     {
         image: 'assets/images/users/avatar-2.jpg',
-        name: 'Keith Gonzales',
+        name: 'Mario Gonzales',
         message: 'This theme is awesome!',
         time: '24 min',
         color: 'success'

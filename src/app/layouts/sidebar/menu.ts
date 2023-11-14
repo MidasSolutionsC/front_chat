@@ -19,7 +19,7 @@ export const MENU: MenuItem[] = [
         id: 2,
         label: 'MENUITEMS.COORDINATIONS.TEXT',
         icon: 'bx-chat',
-        link: '/chat',
+        link: '/',
         
     },
     
@@ -57,8 +57,8 @@ export const MENU: MenuItem[] = [
             {
                 id: 8,
                 label: 'MENUITEMS.GROUPS.LIST.GROUPSLIST',
-                link: '/jobs/list',
-                parentId: 57
+                link: '/groups/list',
+                parentId: 50
             },
             
         ]

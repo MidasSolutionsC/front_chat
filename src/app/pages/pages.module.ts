@@ -16,14 +16,15 @@ import { UIModule } from '../shared/ui/ui.module';
 // Emoji Picker
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { PagesRoutingModule } from './pages-routing.module';
-import { EmailModule } from './email/email.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { GroupsModule } from './groups/groups.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChatComponent } from './chat/chat.component';
+import { CoordinationsComponent } from './coordinations/coordinations.component';
 
 
 @NgModule({
-  declarations: [ ChatComponent],
+  declarations: [ ChatComponent, CoordinationsComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -32,10 +33,10 @@ import { ChatComponent } from './chat/chat.component';
     PagesRoutingModule,
     NgApexchartsModule,
     ReactiveFormsModule,
-    EmailModule,
     HttpClientModule,
     UIModule,
     ContactsModule,
+    GroupsModule,
     WidgetModule,
     FullCalendarModule,
     TabsModule.forRoot(),
