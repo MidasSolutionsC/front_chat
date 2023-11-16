@@ -45,17 +45,18 @@ const revenueBarChart: ChartType = {
 const statData = [
     {
         icon: 'bx bx-check-circle',
-        title: 'Completed Projects',
+        title: 'Proyectos Completados',
         value: '125'
     }, {
         icon: 'bx bx-hourglass',
-        title: 'Pending Projects',
+        title: 'Proyectos Pendientes',
         value: '12'
     }, {
         icon: 'bx bx-package',
-        title: 'Total Revenue',
+        title: 'Total Ganado',
         value: '$36,524'
     }
 ];
 
 export { revenueBarChart, statData };
+    

@@ -18,8 +18,8 @@ export const MENU: MenuItem[] = [
     {
         id: 2,
         label: 'MENUITEMS.COORDINATIONS.TEXT',
-        icon: 'bx-chat',
-        link: '/',
+        icon: 'bxs-group',    
+        link: '/coordinations',
         
     },
     
@@ -52,7 +52,8 @@ export const MENU: MenuItem[] = [
     {
         id: 7,
         label: 'MENUITEMS.GROUPS.TEXT',
-        icon: 'bx-briefcase-alt',
+        icon : 'bx bx-group bx-flashing',
+       //icon: 'bx-briefcase-alt',
         subItems: [
             {
                 id: 8,

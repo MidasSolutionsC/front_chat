@@ -12,9 +12,9 @@
               <div class="dropdown d-inline-block" dropdown>
                 <button type="menu" class="btn btn-success" id="*dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" dropdownToggle><i class="mdi mdi-dots-vertical"></i></button>
                 <ul class="dropdown-menu dropdown-menu dropdown-menu-end show" aria-labelledby="*dropdownMenuButton1" *dropdownMenu>
-                  <li><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Accion</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Otra acción</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Algo más por aquí</a></li>
                 </ul>
               </div>
             </div>
@@ -63,19 +63,19 @@
               <tbody>
                 <tr *ngFor="let data of lists">
                   <th scope="row">{{data.id}}</th>
-                  <td>{{data.title}}</td>
-                  <td>{{data.name}}</td>
-                  <td>{{data.location}}</td>
-                  <td>{{data.experience}}</td>
-                  <td>{{data.position}}</td>
+                  <td>{{data.namegroup}}</td>
+                  <td>{{data.sede}}</td>
+                  <td>{{data.descripcion}}</td>
+                  <td>{{data.cargo}}</td>
+                  <td>{{data.tipo}}</td>
                   <td><span class="badge badge-soft-{{data.type_color}}" [ngClass]="{'badge-soft-success': data.type === 'Full Time','badge-soft-danger': data.type === 'Part Time','badge-soft-info': data.type === 'Freelance','badge-soft-warning': data.type === 'Internship'}">{{data.type}}</span></td>
-                  <td>{{data.posted_date}}</td>
-                  <td>{{data.last_date}}</td>
+                  <td>{{data.created_date}}</td>
+                  <td>{{data.actualizacion_date}}</td>
                   <td><span class="badge" [ngClass]="{ 'bg-success': data.status === 'Active', 'bg-info': data.status === 'New', 'bg-danger': data.status === 'Close'}">{{data.status}}</span></td>
                   <td>
                     <ul class="list-unstyled hstack gap-1 mb-0">
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                        <a routerLink="/jobs/details" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
+                        <a routerLink="/groups/details" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
                       </li>
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                         <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data.id,content)"><i class="mdi mdi-pencil-outline"></i></a>
@@ -109,165 +109,78 @@
   </div>
 </div>
 
-<!-- View Details Model -->
-<ng-template #ViewContent role="document" let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title mt-0">Order Details</h5>
-    <button type="button" class="btn-close" aria-hidden="true" (click)="modalRef?.hide()"></button>
-  </div>
-  <div class="modal-body">
-    <p class="mb-2">
-      Product id:
-      <span class="text-primary">#SK2540</span>
-    </p>
-    <p class="mb-4">
-      Billing Name:
-      <span class="text-primary">Neal Matthews</span>
-    </p>
-    <div class="table-responsive">
-      <table class="table table-centered table-nowrap">
-        <thead>
-          <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">
-              <div>
-                <img src="assets/images/product/img-7.png" alt class="avatar-sm" />
-              </div>
-            </th>
-            <td>
-              <div>
-                <h5 class="text-truncate font-size-14">Wireless Headphone (Black)</h5>
-                <p class="text-muted mb-0">$ 225 x 1</p>
-              </div>
-            </td>
-            <td>$ 255</td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <div>
-                <img src="assets/images/product/img-4.png" alt class="avatar-sm" />
-              </div>
-            </th>
-            <td>
-              <div>
-                <h5 class="text-truncate font-size-14">Phone patterned cases</h5>
-                <p class="text-muted mb-0">$ 145 x 1</p>
-              </div>
-            </td>
-            <td>$ 145</td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <h6 class="m-0">Sub Total:</h6>
-            </td>
-            <td>$ 400</td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <h6 class="m-0">Shipping:</h6>
-            </td>
-            <td>Free</td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <h6 class="m-0">Total:</h6>
-            </td>
-            <td>$ 400</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
-  </div>
-</ng-template>
 
 <!-- Order Create Model -->
 <ng-template #content role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Add Jobs</h5>
+    <h5 class="modal-title" id="exampleModalLabel">Crear Grupo</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
   </div>
   <form (ngSubmit)="saveUser()" [formGroup]="jobListForm">
     <div class="modal-body">
       <input type="hidden" name="id" value="" formControlName="ids" />
       <div class="mb-3">
-        <label for="customername-field" class="form-label">Jobs Title</label>
-        <input type="text" id="customername-field" class="form-control" placeholder="Enter Name" required formControlName="title" [ngClass]="{ 'is-invalid': submitted && form['title'].errors }" />
-        <div *ngIf="submitted && form['title'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['title'].errors['required']">Jobs Title is required</div>
+        <label for="customername-field" class="form-label">Nombre de Grupo </label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe el nombre de grupo" required formControlName="namegroup" [ngClass]="{ 'is-invalid': submitted && form['namegroup'].errors }" />
+        <div *ngIf="submitted && form['namegroup'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['namegroup'].errors['required']">Campo Obligatorio</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="customername-field" class="form-label">Company Name</label>
-        <input type="text" id="customername-field" class="form-control" placeholder="Enter Name" required formControlName="name" [ngClass]="{ 'is-invalid': submitted && form['name'].errors }" />
-        <div *ngIf="submitted && form['name'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['name'].errors['required']">Company Name is required</div>
+        <label for="customername-field" class="form-label">Sede de la Empresa</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Ingresar Sede" required formControlName="sede" [ngClass]="{ 'is-invalid': submitted && form['sede'].errors }" />
+        <div *ngIf="submitted && form['sede'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['sede'].errors['required']">Sede Obligatorio</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="customername-field" class="form-label">Location</label>
-        <input type="text" id="customername-field" class="form-control" placeholder="Enter Location" required formControlName="location" [ngClass]="{ 'is-invalid': submitted && form['location'].errors }" />
-        <div *ngIf="submitted && form['location'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['location'].errors['required']">Location is required</div>
+        <label for="customername-field" class="form-label">Descripción</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe una Descripción" required formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }" />
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['descripcion'].errors['required']">Descripción Obligatoria</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="customername-field" class="form-label">Experience</label>
-        <input type="text" id="customername-field" class="form-control" placeholder="Enter Experience" required formControlName="experience" [ngClass]="{ 'is-invalid': submitted && form['experience'].errors }" />
-        <div *ngIf="submitted && form['experience'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['experience'].errors['required']">Experience is required</div>
+        <label for="customername-field" class="form-label">Cargo</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Ingresa un Cargo" required formControlName="cargo" [ngClass]="{ 'is-invalid': submitted && form['cargo'].errors }" />
+        <div *ngIf="submitted && form['cargo'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['cargo'].errors['required']">Cargo Obligatorio</div>
         </div>
       </div>
 
-      <div class="mb-3">
-        <label for="customername-field" class="form-label">Position</label>
-        <input type="text" id="customername-field" class="form-control" placeholder="Enter Position" required formControlName="position" [ngClass]="{ 'is-invalid': submitted && form['position'].errors }" />
-        <div *ngIf="submitted && form['position'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['position'].errors['required']">Position is required</div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="payment-field" class="form-label">Type</label>
-        <select class="form-control" data-trigger name="payment-method" id="payment-field" formControlName="type" [ngClass]="{ 'is-invalid': submitted && form['type'].errors }">
-          <option value="">Type</option>
+            <div class="mb-3">
+        <label for="payment-field" class="form-label">Tipo</label>
+        <select class="form-control" data-trigger name="payment-method" id="payment-field" formControlName="tipo" [ngClass]="{ 'is-invalid': submitted && form['tipo'].errors }">
+          <option value="">Tipo</option>
           <option value="Full Time">Full Time</option>
           <option value="Part Time">Part Time</option>
         </select>
-        <div *ngIf="submitted && form['type'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['type'].errors['required']">Type is required</div>
+        <div *ngIf="submitted && form['tipo'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['tipo'].errors['required']"> Tipo es  obligatorio</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label for="payment-field" class="form-label">Status</label>
+        <label for="payment-field" class="form-label">Estado</label>
         <select class="form-control" data-trigger name="payment-method" id="payment-field" formControlName="status" [ngClass]="{ 'is-invalid': submitted && form['status'].errors }">
-          <option value="">Status</option>
-          <option value="Active">Active</option>
-          <option value="New">New</option>
-          <option value="Close">Close</option>
+          <option value="">Estado</option>
+          <option value="Active">Activo</option>
+          <option value="New">Nuevo</option>
+          <option value="Close">Cerrado</option>
         </select>
         <div *ngIf="submitted && form['status'].errors" class="invalid-feedback" align="left">
-          <div *ngIf="form['status'].errors['required']">Status is required</div>
+          <div *ngIf="form['status'].errors['required']">Estado FRequerido </div>
         </div>
       </div>
 
     </div>
     <div class="modal-footer">
       <div class="hstack gap-2 justify-content-end">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Close</button>
-        <button type="submit" class="btn btn-success" id="add-btn">Add Order</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Cerrar</button>
+        <button type="submit" class="btn btn-success" id="add-btn">Crear Grupo</button>
       </div>
     </div>
   </form>

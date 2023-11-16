@@ -41,7 +41,7 @@ function sort(groupsList: groupsListModel[], column: SortColumn, direction: stri
 }
 
 function matches(country: groupsListModel, term: string, pipe: PipeTransform) {
-  return country.title.toLowerCase().includes(term.toLowerCase())
+  return country.namegroup.toLowerCase().includes(term.toLowerCase())
   ;
 }
 
@@ -116,17 +116,17 @@ export class GroupsListService {
   }
 
   private _search(): Observable<SearchResult> {
-    const {sortColumn, sortDirection, pageSize, page, searchTerm, status, type, date} = this._state;
+    const {sortColumn, sortDirection, page, searchTerm, status, type} = this._state;
 
     // 1. sort
-    let groupsList = sort(GroupsListdata, sortColumn, sortDirection);    
+    let groupsList = sort( GroupsListdata,sortColumn, sortDirection);    
 
     // 2. filter
     groupsList = groupsList.filter(country => matches(country, searchTerm, this.pipe));  
     
     // 3. Status Filter
     if(status){
-      groupsList = groupsList.filter(country => country.status == status);
+      groupsList = groupsList.filter(country => country.cargo == status);
     }
     else{
       groupsList = groupsList;
@@ -134,7 +134,7 @@ export class GroupsListService {
 
     // 4. Type Filter
     if(type){
-      groupsList = groupsList.filter(country => country.type == type);
+      groupsList = groupsList.filter(country => country.created_date == type);
     }
     else{
       groupsList = groupsList;

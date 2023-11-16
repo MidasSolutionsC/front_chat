@@ -6,7 +6,7 @@ import { UntypedFormBuilder, UntypedFormGroup, FormArray, Validators } from '@an
 
 import Swal from 'sweetalert2';
 
-import {  groupsListModel } from './list.model';
+import { groupsListModel } from './list.model';
 import { GroupsListService } from './list.service';
 import { NgbdGroupsListSortableHeader, SortEvent } from './list-sortable.directive';
 import { GroupsListdata } from './data';
@@ -44,7 +44,7 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Groups' }, { label: 'Groups List', active: true }];
+    this.breadCrumbItems = [{ label: 'Grupos' }, { label: 'Groups List', active: true }];
 
     /**
      * Form Validation
@@ -147,26 +147,23 @@ export class ListComponent implements OnInit {
       if (this.groupsListForm.get('ids')?.value) {
         this.service.products = GroupsListdata.map((data: { id: any; }) => data.id === this.groupsListForm.get('ids')?.value ? { ...data, ...this.groupsListForm.value } : data)
       } else {
-        const title = this.groupsListForm.get('title')?.value;
-        const name = this.groupsListForm.get('name')?.value;
-        const location = this.groupsListForm.get('location')?.value;
-        const experience = this.groupsListForm.get('experience')?.value;
-        const position = this.groupsListForm.get('position')?.value;
-        const type = this.groupsListForm.get('type')?.value;
-        const posted_date = "02 June 2021";
-        const last_date = "25 June 2021";
+        const namegroup = this.groupsListForm.get('namegroup')?.value;
+        const sede = this.groupsListForm.get('sede')?.value;
+        const descripcion = this.groupsListForm.get('descripcion')?.value;
+        const cargo = this.groupsListForm.get('cargo')?.value;     
+        const tipo = this.groupsListForm.get('tipo')?.value;
+        const created_date = "02 June 2021";
+        const actualizacion_date = "25 June 2021";
         const status = this.groupsListForm.get('status')?.value;
         GroupsListdata.push({
           id: this.lists.length + 1,
-          title,
-          name,
-          location,
-          experience,
-          position,
-          type,
-          type_color: "success",
-          posted_date,
-          last_date,
+          namegroup,
+          sede,
+          descripcion,
+          cargo,          
+          tipo,          
+          created_date,
+          actualizacion_date,
           status,
           status_color: "success"
         });

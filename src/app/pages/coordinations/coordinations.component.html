@@ -1,1 +1,92 @@
-<p>coordinations works!</p>
+<div class="container-fluid">
+  
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body border-bottom">
+            <div class="d-flex align-items-center">
+              <h5 class="mb-0 card-title flex-grow-1">Lista de Coordinaciones</h5>
+              <div class="flex-shrink-0 d-flex gap-1">
+                <a href="javascript:void(0);" class="btn btn-primary" (click)="openModal(content)">Crear Coordinación</a>
+                <a href="javascript:void(0);" class="btn btn-light"><i class="mdi mdi-refresh"></i></a>
+                <div class="dropdown d-inline-block" dropdown>
+                  <button type="menu" class="btn btn-success" id="*dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" dropdownToggle><i class="mdi mdi-dots-vertical"></i></button>
+                  <ul class="dropdown-menu dropdown-menu dropdown-menu-end show" aria-labelledby="*dropdownMenuButton1" *dropdownMenu>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Accion</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Otra acción</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Algo más por aquí</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body border-bottom">
+            <div class="row g-3">
+              <div class="col-xxl-4 col-lg-6">
+               
+              </div>
+              <div class="col-xxl-2 col-lg-6">
+                
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                <div id="datepicker1">
+                  
+  
+                </div><!-- input-coordinations -->
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                <button type="button" class="btn btn-soft-secondary w-100"><i class="mdi mdi-filter-outline align-middle"></i> Filter</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+  
+            <div class="table-responsive">
+              <table class="table align-middle dt-responsive nowrap w-100 table-check" id="job-list">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nombre de Coordinacion</th>
+                    <th scope="col">Integrantes</th>
+                    <th scope="col">Descripción</th>                  
+                    <th scope="col">Fecha de Creación</th>
+                    <th scope="col">Fecha de Actualización</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of lists">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.namecoord}}</td>
+                    <td>{{data.integrantes}}</td>
+                    <td>{{data.descripcion}}</td>
+                    <td>{{data.created_date}}</td>
+                    <td>{{data.actualizacion_date}}</td>
+                    <td>{{data.estado}}</td>
+                </tbody>
+              </table>
+            </div>
+            <div class="row justify-content-between align-items-center">
+              <div class="col-auto me-auto">
+              </div>
+              <div class="col-auto">
+                <div class="text-md-right float-md-end pagination-rounded">
+                  <ul class="pagination pagination-rounded justify-content-end mb-2">
+                    
+                  </ul>
+                </div>
+              </div>
+              <!--end col-->
+            </div>
+            <!--end row-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

@@ -288,31 +288,7 @@
         "EditTableTables": "Tabla editable"
       }
     },
-    "CHARTS": {
-      "TEXT": "Gráficos",
-      "LIST": {
-        "APEX": "Gráfico de Apex",
-        "CHARTJS": "Chartjs Chart",
-        "CHARTIST": "Chartist Chart",
-        "ECHART": "Gráfico E"
-      }
-    },
-    "ICONS": {
-      "TEXT": "Íconos",
-      "LIST": {
-        "BOXICONS": "Boxicones",
-        "MATERIALDESIGN": "Diseño de materiales",
-        "DRIPICONS": "Dripicons",
-        "FONTAWESOME": "Fuente impresionante"
-      }
-    },
-    "MAPS": {
-      "TEXT": "Mapas",
-      "LIST": {
-        "GOOGLEMAP": "mapas de Google",
-        "LEAFLETMAP": "Mapas de folletos"
-      }
-    },
+    
     "MULTILEVEL": {
       "TEXT": "Multi nivel",
       "LIST": {

@@ -4,8 +4,7 @@ export interface userListModel {
   name: string;
   position: string;
   email: string;
-  tags: Array<{}>;
-  project: string;
+  tags: Array<{}>;  
   isSelected?:any;
 }
   

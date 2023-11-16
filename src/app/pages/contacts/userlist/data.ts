@@ -4,8 +4,7 @@ const userList = [
     name: "David McHenry",
     position: "UI/UX Designer",
     email: "david@skote.com",
-    tags: ['Photoshop', 'illustrator'],
-    project: "152",
+    tags: ['Administrador'],
     isSelected: false
   },
   {
@@ -14,8 +13,7 @@ const userList = [
     name: "Frank Kirk",
     position: "Frontend Developer",
     email: "frank@skote.com",
-    tags: ['Html', 'Css', '2 + more'],
-    project: "132",
+    tags: ['Coordinador'],    
     isSelected: false
   },
   {
@@ -24,8 +22,7 @@ const userList = [
     name: "Rafael Morales",
     position: "Backend Developer",
     email: "Rafael@skote.com",
-    tags: ['Php', 'Java', 'Python'],
-    project: "112",
+    tags: ['Coordinador'],    
     isSelected: false
   },
   {
@@ -33,8 +30,7 @@ const userList = [
     name: "Mark Ellison",
     position: "Full Stack Developer",
     email: "mark@skote.com",
-    tags: ['Ruby', 'Php', '2 + more'],
-    project: "121",
+    tags: ['Coordinador'],    
     isSelected: false
   },
   {
@@ -43,8 +39,7 @@ const userList = [
     name: "Minnie Walter",
     position: "Frontend Developer",
     email: "minnie@skote.com",
-    tags: ['Html', 'Css', '2 + more'],
-    project: "145",
+    tags: ['BackOfice'],    
     isSelected: false
   },
   {
@@ -53,8 +48,7 @@ const userList = [
     name: "Shirley Smith",
     position: "UI/UX Designer",
     email: "shirley@skote.com",
-    tags: ['Photoshop', 'illustrator'],
-    project: "136",
+    tags: ['BackOfice'],   
     isSelected: false
   },
   {
@@ -62,8 +56,7 @@ const userList = [
     name: "John Santiago",
     position: "Full Stack Developer",
     email: "john@skote.com",
-    tags: ['Ruby', 'Php', '2 + more'],
-    project: "125",
+    tags: ['Comercial'],    
     isSelected: false
   },
   {
@@ -72,8 +65,7 @@ const userList = [
     name: "Colin Melton",
     position: "Backend Developer",
     email: "colin@skote.com",
-    tags: ['Php', 'Java', 'Python'],
-    project: "136",
+    tags: ['Comercial'],      
     isSelected: false
   },
   {
@@ -81,8 +73,7 @@ const userList = [
     name: "Mark Ellison",
     position: "Full Stack Developer",
     email: "mark@skote.com",
-    tags: ['Ruby', 'Php', '2 + more'],
-    project: "121",
+    tags: ['Comercial'],     
     isSelected: false
   },
   {
@@ -91,8 +82,7 @@ const userList = [
     name: "Minnie Walter",
     position: "Frontend Developer",
     email: "minnie@skote.com",
-    tags: ['Html', 'Css', '2 + more'],
-    project: "145",
+    tags: ['Comercial'],      
     isSelected: false
   },
   {
@@ -101,8 +91,7 @@ const userList = [
     name: "Shirley Smith",
     position: "UI/UX Designer",
     email: "shirley@skote.com",
-    tags: ['Photoshop', 'illustrator'],
-    project: "136",
+    tags: ['Comercial'],  
     isSelected: false
   },
   {
@@ -110,8 +99,7 @@ const userList = [
     name: "John Santiago",
     position: "Full Stack Developer",
     email: "john@skote.com",
-    tags: ['Ruby', 'Php', '2 + more'],
-    project: "125",
+    tags: ['Sistemas'],
     isSelected: false
   },
   {
@@ -120,8 +108,8 @@ const userList = [
     name: "Colin Melton",
     position: "Backend Developer",
     email: "colin@skote.com",
-    tags: ['Php', 'Java', 'Python'],
-    project: "136",
+    tags: ['Sistemas'],
+    
     isSelected: false
   },
 ]

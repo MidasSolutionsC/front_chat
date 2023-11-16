@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'Contacts' }, { label: 'Profile', active: true }];
+    this.breadCrumbItems = [{ label: 'Contactos' }, { label: 'Perfil', active: true }];
 
     // fetches the data
     this._fetchData();

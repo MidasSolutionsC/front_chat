@@ -45,7 +45,7 @@ export class UserlistComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'Contacts' }, { label: 'Users List', active: true }];
+    this.breadCrumbItems = [{ label: 'Contacts' }, { label: 'Lista de usuarios', active: true }];
 
     setTimeout(() => {
       this.contactsList.subscribe(x => {
@@ -59,7 +59,7 @@ export class UserlistComponent implements OnInit {
       name: ['', [Validators.required]],
       email: ['', [Validators.required]],
       position: ['', [Validators.required]],
-      tags: ['', [Validators.required]],
+     
       img: ['', [Validators.required]],
     })
   }
@@ -98,7 +98,6 @@ export class UserlistComponent implements OnInit {
           email,
           position,
           tags,
-          project: "136",
           isSelected: false
         })
       }
@@ -113,16 +112,15 @@ export class UserlistComponent implements OnInit {
     this.newContactModal.show();
 
     var modelTitle = document.querySelector('.modal-title') as HTMLAreaElement;
-    modelTitle.innerHTML = 'Edit Profile';
+    modelTitle.innerHTML = 'Editar Perfil ';
     var updateBtn = document.getElementById('addContact-btn') as HTMLAreaElement;
-    updateBtn.innerHTML = "Update";
+    updateBtn.innerHTML = "Actualizar";
 
     var listData = this.contacts[id];
 
     this.createContactForm.controls['id'].setValue(listData.id);
     this.createContactForm.controls['name'].setValue(listData.name);
     this.createContactForm.controls['email'].setValue(listData.email);
-    this.createContactForm.controls['position'].setValue(listData.position);
     this.createContactForm.controls['tags'].setValue(listData.tags);
     this.createContactForm.controls['img'].setValue(listData.profile);
   }
