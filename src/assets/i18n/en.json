@@ -59,7 +59,6 @@
     },
     "LOGIN": {
       "PROFILE": "Profile",
-      "MY_WALLET": "My Wallet",
       "SETTINGS": "Settings",
       "LOCK_SCREEN": "Lock screen",
       "LOGOUT": "Logout"
@@ -177,7 +176,6 @@
     "CONTACTS": {
       "TEXT": "Contacts",
       "LIST": {
-        "USERGRID": "User Grid",
         "USERLIST": "User List",
         "PROFILE": "Profile"
       }

@@ -27,112 +27,6 @@
       </button>
 
      
-      <div class="dropdown dropdown-mega d-none d-lg-block me-2" dropdown>
-        <button type="button" class="btn header-item" dropdownToggle>
-          {{ 'HEADER.MEGA_MENU' | translate}}
-          <i class="mdi mdi-chevron-down"></i>
-        </button>
-        <div class="dropdown-menu dropdown-megamenu" *dropdownMenu>
-          <div class="row">
-            <div class="col-sm-8">
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.UI.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.LIGHTBOX' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RANGE_SLIDER' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.SWEET_ALERT' | translate}}</a>
-                    </li>
-                
-                  </ul>
-                </div>
-
-                <div class="col-md-4">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.APPLICATIONS.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.APPLICATIONS.EMAIL' | translate}}</a>
-                    </li>                    
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.APPLICATIONS.CONTACTS' | translate}}</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="col-md-4">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.EXTRA_PAGES.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.LIGHT_SIDEBAR' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.COMPACT_SIDEBAR' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.HORIZONTAL_LAYOUT' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.MAINTENANCE' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.COMING SOON' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.TIMELINE' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.EXTRA_PAGES.FAQ' | translate}}</a>
-                    </li>
-
-                  </ul>
-                </div>
-              </div>
-            </div> 
-            <div class="col-sm-4">
-              <div class="row">
-                <div class="col-sm-6">
-                  <h5 class="font-size-14 mt-0">{{ 'HEADER.UI.TITLE' | translate}}</h5>
-                  <ul class="list-unstyled megamenu-list">
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.LIGHTBOX' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RANGE_SLIDER' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.SWEET_ALERT' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.RATING' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.FORMS' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.TABLES' | translate}}</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">{{ 'HEADER.UI.CHARTS' | translate}}</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="col-sm-5">
-                  <div>
-                    <img src="assets/images/megamenu-img.png" alt="" class="img-fluid mx-auto d-block">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="d-flex">
@@ -292,19 +186,7 @@
                 </div>
               </div>
             </a>
-            <a href="javascript: void(0);" class="text-reset notification-item">
-              <div class="media">
-                <img src="assets/images/users/avatar-4.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">{{ 'HEADER.NOTIFICATIONS.FOUR.TITLE' | translate}}</h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">{{ 'HEADER.NOTIFICATIONS.FOUR.TEXT' | translate}}</p>
-                    <p class="mb-0"><i
-                        class="mdi mdi-clock-outline"></i>{{ 'HEADER.NOTIFICATIONS.FOUR.TIME' | translate}}</p>
-                  </div>
-                </div>
-              </div>
-            </a>
+            
           </ngx-simplebar>
           <div class="p-2 border-top d-grid">
             <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
@@ -317,15 +199,13 @@
       <div class="dropdown d-inline-block" dropdown>
         <button type="button" class="btn header-item" id="page-header-user-dropdown" dropdownToggle>
           <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
-          <span class="d-none d-xl-inline-block ms-1">Henry </span>
+          <span class="d-none d-xl-inline-block ms-1"> Jhoely Tapia</span>
           <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
           <!-- item-->
           <a class="dropdown-item" href="javascript: void(0);"><i class="bx bx-user font-size-16 align-middle me-1"></i>
             {{ 'HEADER.LOGIN.PROFILE' | translate}}</a>
-          <a class="dropdown-item" href="javascript: void(0);"><i
-              class="bx bx-wallet font-size-16 align-middle me-1"></i>{{ 'HEADER.LOGIN.MY_WALLET' | translate}}</a>
           <a class="dropdown-item d-block" href="javascript: void(0);"><span
               class="badge bg-success float-end">11</span><i
               class="bx bx-wrench font-size-16 align-middle me-1"></i>{{ 'HEADER.LOGIN.SETTINGS' | translate}} </a>

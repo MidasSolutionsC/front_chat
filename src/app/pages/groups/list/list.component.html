@@ -91,7 +91,7 @@
           </div>
           <div class="row justify-content-between align-items-center">
             <div class="col-auto me-auto">
-              <p class="text-muted mb-0">Showing <b>{{service.startIndex}}</b> to <b>{{service.endIndex}}</b> of <b>{{service.totalRecords}}</b> entries</p>
+              <p class="text-muted mb-0">Mostrando <b>{{service.startIndex}}</b> a <b>{{service.endIndex}}</b> de <b>{{service.totalRecords}}</b> entradas</p>
             </div>
             <div class="col-auto">
               <div class="text-md-right float-md-end pagination-rounded">
@@ -116,7 +116,7 @@
     <h5 class="modal-title" id="exampleModalLabel">Crear Grupo</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
   </div>
-  <form (ngSubmit)="saveUser()" [formGroup]="jobListForm">
+  <form (ngSubmit)="saveUser()" [formGroup]="groupsListForm">
     <div class="modal-body">
       <input type="hidden" name="id" value="" formControlName="ids" />
       <div class="mb-3">

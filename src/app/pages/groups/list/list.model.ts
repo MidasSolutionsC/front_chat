@@ -3,9 +3,8 @@ export interface groupsListModel {
   namegroup: string;
   sede: string;
   descripcion: string;
-  cargo: any;
-  tipo: any;
+  cargo: string;
+  tipo: string;
   created_date: any;
   actualizacion_date: any;
-  
 }

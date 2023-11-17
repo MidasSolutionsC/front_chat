@@ -3,19 +3,19 @@ import { DecimalPipe  } from '@angular/common';
 import { Observable } from 'rxjs';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { UntypedFormBuilder, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
-
 import Swal from 'sweetalert2';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-coordinations',
   templateUrl: './coordinations.component.html',
   styleUrls: ['./coordinations.component.scss']
 })
 export class CoordinationsComponent {
-  odalRef?: BsModalRef;
+  modalRef?: BsModalRef;
 
   // bread crumb items
   breadCrumbItems: Array<{}>;
-  groupsListForm!: UntypedFormGroup;
+  coordinationsListForm!: UntypedFormGroup;
   submitted: boolean = false;
 
   // Table data
@@ -23,26 +23,27 @@ export class CoordinationsComponent {
   lists?: any;
   
 
-  constructor(private modalService: BsModalService, private formBuilder: UntypedFormBuilder) {
-  
+  constructor(private modalService: BsModalService, private formBuilder: UntypedFormBuilder, private http: HttpClient) {
+    this.updateContent();
   }
+  
+
+  
+    
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Groups' }, { label: 'Groups List', active: true }];
+    this.breadCrumbItems = [{ label: 'Coordinations' }, { label: 'Lista de Coordinaciones', active: true }];
 
     /**
      * Form Validation
      */
-    this.groupsListForm = this.formBuilder.group({
+    this.coordinationsListForm = this.formBuilder.group({
       id: "11",
       ids: [''],
-      title: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      location: ['', [Validators.required]],
-      experience: ['', [Validators.required]],
-      position: ['', [Validators.required]],
-      type: ['', [Validators.required]],
-      status: ['', [Validators.required]]
+      namecoord: ['', [Validators.required]],
+      integrantes: ['', [Validators.required]],
+      descripcion: ['', [Validators.required]],
+      estado: ['', [Validators.required]]
     });
 
     /**
@@ -73,19 +74,19 @@ export class CoordinationsComponent {
 
     swalWithBootstrapButtons
       .fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
+        title:'¿Estás seguro?' ,
+        text: 'No volverás a recuperarlo',
         icon: 'warning',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: 'Si, Borrar',
+        cancelButtonText: 'No, cancelar!',
         showCancelButton: true
       })
       .then(result => {
         if (result.value) {
           swalWithBootstrapButtons.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
+            'Eliminado!',
+            'Su archivo ha sido eliminado.',
+            
           );
           event.target.closest('tr')?.remove();
         } else if (
@@ -93,13 +94,19 @@ export class CoordinationsComponent {
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
+            'Cancelado',
+            'Tu archivo está a salvo :)',
             'error'
           );
         }
       });
   }
+
+  updateContent() {
+    this.http.get('http://localhost:4200/coordinations', { responseType: 'text' }).subscribe(data => {
+      this.content = data;
+    });
+ }
 
   /**
    * Open modal
@@ -107,14 +114,14 @@ export class CoordinationsComponent {
    */
   openModal(content: any) {
     this.submitted = false;
-    
+    this.modalRef = this.modalService.show(content, { class: 'modal-md' });
   }
 
   /**
    * Form data get
    */
   get form() {
-    return this.groupsListForm.controls;
+    return this.coordinationsListForm.controls;
   }
 
   /**
@@ -131,18 +138,15 @@ export class CoordinationsComponent {
     this.submitted = false;
 
     var modelTitle = document.querySelector('.modal-title') as HTMLAreaElement;
-    modelTitle.innerHTML = 'Edit Order';
+    modelTitle.innerHTML = 'Editar Coordinación';
     var updateBtn = document.getElementById('add-btn') as HTMLAreaElement;
-    updateBtn.innerHTML = "Update";
+    updateBtn.innerHTML = "Actualzar";
     var listData = this.lists.filter((data: { id: any; }) => data.id === id);
-    this.groupsListForm.controls['title'].setValue(listData[0].title);
-    this.groupsListForm.controls['name'].setValue(listData[0].name);
-    this.groupsListForm.controls['location'].setValue(listData[0].location);
-    this.groupsListForm.controls['experience'].setValue(listData[0].experience);
-    this.groupsListForm.controls['position'].setValue(listData[0].position);
-    this.groupsListForm.controls['type'].setValue(listData[0].type);
-    this.groupsListForm.controls['status'].setValue(listData[0].status);
-    this.groupsListForm.controls['ids'].setValue(listData[0].id);
+    this.coordinationsListForm.controls['namecoord'].setValue(listData[0].namecoord);
+    this.coordinationsListForm.controls['integrantes'].setValue(listData[0].integrantes);
+    this.coordinationsListForm.controls['descripcion'].setValue(listData[0].descripcion);
+    this.coordinationsListForm.controls['status'].setValue(listData[0].status);
+    this.coordinationsListForm.controls['ids'].setValue(listData[0].id);
   }
 
 

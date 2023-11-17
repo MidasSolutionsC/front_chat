@@ -95,11 +95,11 @@ export class ListComponent implements OnInit {
 
     swalWithBootstrapButtons
       .fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
+        title: '¿Estás seguro?', 
+        text: 'Esta acción no se puede revertir',
         icon: 'warning',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: 'Si,  Borrar',
+        cancelButtonText: 'No, cancelar',
         showCancelButton: true
       })
       .then(result => {
@@ -165,7 +165,7 @@ export class ListComponent implements OnInit {
           created_date,
           actualizacion_date,
           status,
-          status_color: "success"
+          status_color: "Exito"
         });
       }
     }
@@ -184,16 +184,15 @@ export class ListComponent implements OnInit {
     this.submitted = false;
     this.modalRef = this.modalService.show(content, { class: 'modal-md' });
     var modelTitle = document.querySelector('.modal-title') as HTMLAreaElement;
-    modelTitle.innerHTML = 'Edit Order';
+    modelTitle.innerHTML = 'Editar Grupo';
     var updateBtn = document.getElementById('add-btn') as HTMLAreaElement;
-    updateBtn.innerHTML = "Update";
+    updateBtn.innerHTML = "Actualizar";
     var listData = this.lists.filter((data: { id: any; }) => data.id === id);
-    this.groupsListForm.controls['title'].setValue(listData[0].title);
-    this.groupsListForm.controls['name'].setValue(listData[0].name);
-    this.groupsListForm.controls['location'].setValue(listData[0].location);
-    this.groupsListForm.controls['experience'].setValue(listData[0].experience);
-    this.groupsListForm.controls['position'].setValue(listData[0].position);
-    this.groupsListForm.controls['type'].setValue(listData[0].type);
+    this.groupsListForm.controls['namegroup'].setValue(listData[0].namegroup);
+    this.groupsListForm.controls['sede'].setValue(listData[0].sede);
+    this.groupsListForm.controls['descripcion'].setValue(listData[0].descripcion);
+    this.groupsListForm.controls['cargo'].setValue(listData[0].cargo);
+    this.groupsListForm.controls['tipo'].setValue(listData[0].tipo);
     this.groupsListForm.controls['status'].setValue(listData[0].status);
     this.groupsListForm.controls['ids'].setValue(listData[0].id);
   }
