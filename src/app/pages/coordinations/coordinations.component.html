@@ -1,0 +1,128 @@
+<div class="container-fluid">
+  
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body border-bottom">
+            <div class="d-flex align-items-center">
+              <h5 class="mb-0 card-title flex-grow-1">Lista de Coordinaciones</h5>
+              <div class="flex-shrink-0 d-flex gap-1">
+                <a href="javascript:void(0);" class="btn btn-primary" (click)="openModal(content)">Crear Coordinación</a>
+                <a href="javascript:void(0);" class="btn btn-light" (click)="updateContent()"><i class="mdi mdi-refresh"></i></a>
+                <!-- <div class="dropdown d-inline-block" dropdown>
+                  <button type="menu" class="btn btn-success" id="*dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" dropdownToggle><i class="mdi mdi-dots-vertical"></i></button>
+                  <ul class="dropdown-menu dropdown-menu dropdown-menu-end show" aria-labelledby="*dropdownMenuButton1" *dropdownMenu>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Accion</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Otra acción</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);">Algo más por aquí</a></li>
+                  </ul>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="card-body border-bottom">
+            <div class="row g-3">
+              <div class="col-xxl-4 col-lg-6">
+               
+              </div>
+              <div class="col-xxl-2 col-lg-6">
+                
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                <div id="datepicker1">
+                  
+  
+                </div><!-- input-coordinations -->
+              </div>
+              <div class="col-xxl-2 col-lg-4">
+                <button type="button" class="btn btn-soft-secondary w-100"><i class="mdi mdi-filter-outline align-middle"></i> Filtrar</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+  
+            <div class="table-responsive">
+              <table class="table align-middle dt-responsive nowrap w-100 table-check" id="job-list">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nombre de Coordinacion</th>
+                    <th scope="col">Integrantes</th>
+                    <th scope="col">Descripción</th>                  
+                    <th scope="col">Fecha de Creación</th>
+                    <th scope="col">Fecha de Actualización</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of lists">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.namecoord}}</td>
+                    <td>{{data.integrantes}}</td>
+                    <td>{{data.descripcion}}</td>
+                    <td>{{data.created_date}}</td>
+                    <td>{{data.actualizacion_date}}</td>
+                    <td>{{data.estado}}</td>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!--end row-->
+        </div>
+      </div>
+    </div>
+  </div>
+           <!-- Order Create Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Crear Coordinación</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
+  </div>
+  <form (ngSubmit)="saveUser()" [formGroup]="coordinationsListForm">
+    <div class="modal-body">
+      <input type="hidden" name="id" value="" formControlName="ids" />
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Nombre de Coordinación </label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe el nombre de la Coordinación" required formControlName="namecoord" [ngClass]="{ 'is-invalid': submitted && form['namecoord'].errors }" />
+        <div *ngIf="submitted && form['namecoord'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['namecoord'].errors['required']">Nombre De  Coordinación es Obligatorio </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Integrantes</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Agregar Integrantes" required formControlName="integrantes" [ngClass]="{ 'is-invalid': submitted && form['integrantes'].errors }" />
+        <div *ngIf="submitted && form['integrantes'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['integrantes'].errors['required']">Agregar Integrantes es Obligatorio</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Descripción</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe una Descripción" required formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }" />
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['descripcion'].errors['required']">Descripción Obligatoria</div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Cerrar</button>
+        <button type="submit" class="btn btn-success" id="add-btn">Crear Coordinación</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<!--End Modal -->
+           
+         
+      
+
+  
+  
