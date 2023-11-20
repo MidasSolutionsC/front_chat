@@ -39,13 +39,6 @@ const chatData = [
         time: '5 hrs',
         color: 'success'
     },
-    {
-        image: 'assets/images/users/avatar-2.jpg',
-        name: 'Keith Gonzales',
-        message: 'This theme is awesome!',
-        time: '24 min',
-        color: 'success'
-    },
 ];
 
 const chatMessagesData = [

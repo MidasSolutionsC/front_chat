@@ -1,0 +1,188 @@
+<div class="container-fluid">
+  
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Lista de  Grupos</h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a href="javascript:void(0);" class="btn btn-primary" (click)="openModal(content)">Crear Grupo</a>
+              <a href="javascript:void(0);" class="btn btn-light"><i class="mdi mdi-refresh"></i></a>
+              <div class="dropdown d-inline-block" dropdown>
+                <button type="menu" class="btn btn-success" id="*dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" dropdownToggle><i class="mdi mdi-dots-vertical"></i></button>
+                <ul class="dropdown-menu dropdown-menu dropdown-menu-end show" aria-labelledby="*dropdownMenuButton1" *dropdownMenu>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Accion</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Otra acción</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);">Algo más por aquí</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body border-bottom">
+          <div class="row g-3">
+            <div class="col-xxl-4 col-lg-6">
+             
+            </div>
+            <div class="col-xxl-2 col-lg-6">
+              
+            </div>
+            <div class="col-xxl-2 col-lg-4">
+              
+            </div>
+            <div class="col-xxl-2 col-lg-4">
+              <div id="datepicker1">
+                
+
+              </div><!-- input-group -->
+            </div>
+            <div class="col-xxl-2 col-lg-4">
+              <button type="button" class="btn btn-soft-secondary w-100"><i class="mdi mdi-filter-outline align-middle"></i> Filter</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+            <table class="table align-middle dt-responsive nowrap w-100 table-check" id="job-list">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Nombre de Grupo</th>
+                  <th scope="col">Sede de la empresa</th>
+                  <th scope="col">Descripción</th>                  
+                  <th scope="col">Cargo</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Fecha de Creación</th>
+                  <th scope="col">Fecha de Actualización</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lists">
+                  <th scope="row">{{data.id}}</th>
+                  <td>{{data.namegroup}}</td>
+                  <td>{{data.sede}}</td>
+                  <td>{{data.descripcion}}</td>
+                  <td>{{data.cargo}}</td>
+                  <td>{{data.tipo}}</td>
+                  <td><span class="badge badge-soft-{{data.type_color}}" [ngClass]="{'badge-soft-success': data.type === 'Full Time','badge-soft-danger': data.type === 'Part Time','badge-soft-info': data.type === 'Freelance','badge-soft-warning': data.type === 'Internship'}">{{data.type}}</span></td>
+                  <td>{{data.created_date}}</td>
+                  <td>{{data.actualizacion_date}}</td>
+                  <td><span class="badge" [ngClass]="{ 'bg-success': data.status === 'Active', 'bg-info': data.status === 'New', 'bg-danger': data.status === 'Close'}">{{data.status}}</span></td>
+                  <td>
+                    <ul class="list-unstyled hstack gap-1 mb-0">
+                      <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                        <a routerLink="/groups/details" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
+                      </li>
+                      <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data.id,content)"><i class="mdi mdi-pencil-outline"></i></a>
+                      </li>
+                      <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                        <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="delete($event)"><i class="mdi mdi-delete-outline"></i></a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row justify-content-between align-items-center">
+            <div class="col-auto me-auto">
+              <p class="text-muted mb-0">Mostrando <b>{{service.startIndex}}</b> a <b>{{service.endIndex}}</b> de <b>{{service.totalRecords}}</b> entradas</p>
+            </div>
+            <div class="col-auto">
+              <div class="text-md-right float-md-end pagination-rounded">
+                <ul class="pagination pagination-rounded justify-content-end mb-2">
+                  
+                </ul>
+              </div>
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Order Create Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Crear Grupo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
+  </div>
+  <form (ngSubmit)="saveUser()" [formGroup]="groupsListForm">
+    <div class="modal-body">
+      <input type="hidden" name="id" value="" formControlName="ids" />
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Nombre de Grupo </label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe el nombre de grupo" required formControlName="namegroup" [ngClass]="{ 'is-invalid': submitted && form['namegroup'].errors }" />
+        <div *ngIf="submitted && form['namegroup'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['namegroup'].errors['required']">Campo Obligatorio</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Sede de la Empresa</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Ingresar Sede" required formControlName="sede" [ngClass]="{ 'is-invalid': submitted && form['sede'].errors }" />
+        <div *ngIf="submitted && form['sede'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['sede'].errors['required']">Sede Obligatorio</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Descripción</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Escribe una Descripción" required formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }" />
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['descripcion'].errors['required']">Descripción Obligatoria</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="customername-field" class="form-label">Cargo</label>
+        <input type="text" id="customername-field" class="form-control" placeholder="Ingresa un Cargo" required formControlName="cargo" [ngClass]="{ 'is-invalid': submitted && form['cargo'].errors }" />
+        <div *ngIf="submitted && form['cargo'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['cargo'].errors['required']">Cargo Obligatorio</div>
+        </div>
+      </div>
+
+            <div class="mb-3">
+        <label for="payment-field" class="form-label">Tipo</label>
+        <select class="form-control" data-trigger name="payment-method" id="payment-field" formControlName="tipo" [ngClass]="{ 'is-invalid': submitted && form['tipo'].errors }">
+          <option value="">Tipo</option>
+          <option value="Full Time">Full Time</option>
+          <option value="Part Time">Part Time</option>
+        </select>
+        <div *ngIf="submitted && form['tipo'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['tipo'].errors['required']"> Tipo es  obligatorio</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="payment-field" class="form-label">Estado</label>
+        <select class="form-control" data-trigger name="payment-method" id="payment-field" formControlName="status" [ngClass]="{ 'is-invalid': submitted && form['status'].errors }">
+          <option value="">Estado</option>
+          <option value="Active">Activo</option>
+          <option value="New">Nuevo</option>
+          <option value="Close">Cerrado</option>
+        </select>
+        <div *ngIf="submitted && form['status'].errors" class="invalid-feedback" align="left">
+          <div *ngIf="form['status'].errors['required']">Estado FRequerido </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modal.close('Close click')">Cerrar</button>
+        <button type="submit" class="btn btn-success" id="add-btn">Crear Grupo</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<!--End Modal -->
