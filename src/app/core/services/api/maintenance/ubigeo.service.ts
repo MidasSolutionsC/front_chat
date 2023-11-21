@@ -54,6 +54,21 @@ export class UbigeoService {
     }
   }
 
+  public getDepartments(): Observable<any> {
+    const endpoint = `${this.baseUrl}/get-departments`;
+    return this.http.post(endpoint, {}).pipe(map((res: any) => res))
+  }
+
+  public getProvinces(ubigeoDep: any): Observable<any> {
+    const endpoint = `${this.baseUrl}/get-provinces/${ubigeoDep}`;
+    return this.http.post(endpoint, {}).pipe(map((res: any) => res))
+  }
+
+  public getDistricts(ubigeoProv: any): Observable<any> {
+    const endpoint = `${this.baseUrl}/get-districts/${ubigeoProv}`;
+    return this.http.post(endpoint, {}).pipe(map((res: any) => res))
+  }
+
   public getSearch(data: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/search`;
     return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))

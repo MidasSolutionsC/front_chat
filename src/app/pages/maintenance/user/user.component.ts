@@ -16,7 +16,7 @@ export class UserComponent implements OnInit, OnDestroy {
   
   modalRef?: BsModalRef;
 
-  dataModal = {
+   dataModal = {
     title: 'Crear usuarios',
   }
 
@@ -89,11 +89,11 @@ export class UserComponent implements OnInit, OnDestroy {
     this.breadCrumbItems = Breadcrumb.casts([{ label: 'Mantenimiento'}, { label: 'Usuarios', active: true }]);
 
     this.initForm();
-    // this.listDataApi();
-    this.apiCountryList();
-    this.apiTypeDocumentList();
-    this.apiTypeUserList();
-    this.apiUserListPagination();
+    this.listDataApi();
+    // this.apiCountryList();
+    // this.apiTypeDocumentList();
+    // this.apiTypeUserList();
+    // this.apiUserListPagination();
 
     this.identificationForm = this.formBuilder.group({
       formList: this.formBuilder.array([]),
@@ -208,8 +208,12 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   public listDataApi(forceRefresh: boolean = false){
     this._sweetAlertService.loadingUp('Obteniendo datos')
-    this._userService.getAll(forceRefresh).subscribe((response: ResponseApi) => {
+    this._userService.getAll(forceRefresh).subscribe((response: any) => {
       this._sweetAlertService.stop();
+
+      console.log("RESPUESTA:", response)
+      this.lists = response;
+
       if(response.code == 200){
         this.lists = response.data;
       }

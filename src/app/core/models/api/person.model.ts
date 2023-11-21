@@ -4,47 +4,54 @@ import { IdentificationDocument, IdentificationDocumentList } from "./identifica
 import { Model } from "./model";
 
 export class Person extends Model{
-  public id?: number;
-  public paises_id?: number;
-  public codigo_ubigeo?: string;
+  public id?: string;
+  public ubigeoId?: string;
+  public ubigeo?: string;
   public nombres?: string;
-  public nacionalidad?: string;
-  public apellido_paterno?: string;
-  public apellido_materno?: string;
-  public fecha_nacimiento?: string;
-  public identifications?: IdentificationDocument[];
-  public contacts?: Contact[];
-  public addresses?: Address[];
+  public apellidoPaterno?: string;
+  public apellidoMaterno?: string;
+  public typeDocumentId?: string;
+  public nroDocumento?: string;
+  public fechaNacimiento?: string;
+  public genero?: 'M' | 'F' | 'O';
+  public correo?: string;
+  public telefono?: string;
+  public direccion?: string;
+  
 
   constructor(data?: object){
     super(data);
     this.id = this.id || null;
-    this.paises_id = this.paises_id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.ubigeo = this.ubigeo || null;
     this.nombres = this.nombres || null;
-    this.nacionalidad = this.nacionalidad || null;
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.codigo_ubigeo = this.codigo_ubigeo || '';
-    this.fecha_nacimiento = this.fecha_nacimiento || null;
-    this.identifications = this.identifications || [];
-    this.contacts = this.contacts || [];
-    this.addresses = this.addresses || [];
+    this.apellidoPaterno = this.apellidoPaterno || '';
+    this.apellidoMaterno = this.apellidoMaterno || '';
+    this.typeDocumentId = this.typeDocumentId || null;
+    this.nroDocumento = this.nroDocumento || null;
+    this.fechaNacimiento = this.fechaNacimiento || null;
+    this.genero = this.genero || null;
+    this.correo = this.correo || null;
+    this.telefono = this.telefono || null;
+    this.direccion = this.direccion || null;
   }
 
   public static cast(data: object): Person{
     const obj = new Person(data);
     return {
       id: obj.id, 
-      paises_id: obj.paises_id,
+      ubigeoId: obj.ubigeoId,
+      ubigeo: obj.ubigeo,
       nombres: obj.nombres,
-      nacionalidad: obj.nacionalidad,
-      apellido_paterno: obj.apellido_paterno,
-      apellido_materno: obj.apellido_materno,
-      codigo_ubigeo: obj.codigo_ubigeo,
-      fecha_nacimiento: obj.fecha_nacimiento,
-      identifications: obj.identifications,
-      contacts: obj.contacts,
-      addresses: obj.addresses,
+      apellidoPaterno: obj.apellidoPaterno,
+      apellidoMaterno: obj.apellidoMaterno,
+      typeDocumentId: obj.typeDocumentId,
+      nroDocumento: obj.nroDocumento,
+      fechaNacimiento: obj.fechaNacimiento,
+      genero: obj.genero,
+      correo: obj.correo,
+      telefono: obj.telefono,
+      direccion: obj.direccion,
     };
   }
 
@@ -54,50 +61,54 @@ export class Person extends Model{
 }
 
 export class PersonList extends Model{
-  public id: number;
-  public paises_id: number;
-  public paises_nombre: string;
-  public nombres: string;
-  public nacionalidad?: string;
-  public apellido_paterno: string;
-  public apellido_materno: string;
-  public codigo_ubigeo: string;
-  public fecha_nacimiento: string;
-  public identifications?: IdentificationDocument[];
-  public contacts?: Contact[];
-  public addresses?: Address[];
+  public id?: string;
+  public ubigeoId?: string;
+  public ubigeo?: string;
+  public nombres?: string;
+  public apellidoPaterno?: string;
+  public apellidoMaterno?: string;
+  public typeDocumentId?: string;
+  public nroDocumento?: string;
+  public fechaNacimiento?: string;
+  public genero?: 'M' | 'F' | 'O';
+  public correo?: string;
+  public telefono?: string;
+  public direccion?: string;
+  
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
-    this.paises_id = this.paises_id || 0;
-    this.paises_nombre = this.paises_nombre || '';
+    this.id = this.id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.ubigeo = this.ubigeo || null;
     this.nombres = this.nombres || null;
-    this.nacionalidad = this.nacionalidad || null;
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.codigo_ubigeo = this.codigo_ubigeo || '';
-    this.fecha_nacimiento = this.fecha_nacimiento || '';
-    this.identifications = this.identifications || [];
-    this.contacts = this.contacts || [];
-    this.addresses = this.addresses || [];
+    this.apellidoPaterno = this.apellidoPaterno || '';
+    this.apellidoMaterno = this.apellidoMaterno || '';
+    this.typeDocumentId = this.typeDocumentId || null;
+    this.nroDocumento = this.nroDocumento || null;
+    this.fechaNacimiento = this.fechaNacimiento || null;
+    this.genero = this.genero || null;
+    this.correo = this.correo || null;
+    this.telefono = this.telefono || null;
+    this.direccion = this.direccion || null;
   }
 
   public static cast(data: object): PersonList{
     const obj = new PersonList(data);
     return {
       id: obj.id, 
-      paises_id: obj.paises_id,
-      paises_nombre: obj.paises_nombre,
+      ubigeoId: obj.ubigeoId,
+      ubigeo: obj.ubigeo,
       nombres: obj.nombres,
-      nacionalidad: obj.nacionalidad,
-      apellido_paterno: obj.apellido_paterno,
-      apellido_materno: obj.apellido_materno,
-      codigo_ubigeo: obj.codigo_ubigeo,
-      fecha_nacimiento: obj.fecha_nacimiento,
-      identifications: obj.identifications,
-      contacts: obj.contacts,
-      addresses: obj.addresses,
+      apellidoPaterno: obj.apellidoPaterno,
+      apellidoMaterno: obj.apellidoMaterno,
+      typeDocumentId: obj.typeDocumentId,
+      nroDocumento: obj.nroDocumento,
+      fechaNacimiento: obj.fechaNacimiento,
+      genero: obj.genero,
+      correo: obj.correo,
+      telefono: obj.telefono,
+      direccion: obj.direccion,
     };
   }
 

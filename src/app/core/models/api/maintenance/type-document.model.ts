@@ -1,23 +1,29 @@
 import { Model } from "../model";
 
 export class TypeDocument extends Model{
-  public id: number;
+  public id: string;
+  public codigo: string;
   public nombre: string;
-  public abreviacion: string;
-  public is_active: boolean;
+  public typeStatusId: string;
+  public color: string;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || undefined;
+    this.id = this.id || null;
     this.nombre = this.nombre || '';
-    this.abreviacion = this.abreviacion || '';
-    this.is_active = this.is_active || true;
+    this.typeStatusId = this.typeStatusId || '';
+    this.color = this.color || null;
   }
 
   public static cast(data: object): TypeDocument{
     const typeDocument = new TypeDocument(data);
-    const {id, nombre, abreviacion, is_active} = typeDocument;
-    return {id, nombre, abreviacion, is_active};
+    return {
+      id: typeDocument.id,
+      codigo: typeDocument.codigo,
+      nombre: typeDocument.nombre,
+      typeStatusId: typeDocument.typeStatusId,
+      color: typeDocument.color,
+    }
   }
 
   public static casts(dataArray: object[]): TypeDocument[]{
@@ -26,29 +32,29 @@ export class TypeDocument extends Model{
 }
 
 export class TypeDocumentList extends Model{
-  public id: number;
+  public id: string;
+  public codigo: string;
   public nombre: string;
-  public abreviacion: string;
-  public is_active: boolean;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
+  public typeStatusId: string;
+  public color: string;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
+    this.id = this.id || null;
     this.nombre = this.nombre || '';
-    this.abreviacion = this.abreviacion || '';
-    this.is_active = this.is_active || false;
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
+    this.typeStatusId = this.typeStatusId || '';
+    this.color = this.color || null;
   }
 
   public static cast(data: object): TypeDocumentList{
-    const typeDocumentList = new TypeDocumentList(data);
-    const { id, nombre, abreviacion, is_active, created_at, updated_at, deleted_at } = typeDocumentList;
-    return {id, nombre, abreviacion, is_active, created_at, updated_at, deleted_at};
+    const typeDocument = new TypeDocument(data);
+    return {
+      id: typeDocument.id,
+      codigo: typeDocument.codigo,
+      nombre: typeDocument.nombre,
+      typeStatusId: typeDocument.typeStatusId,
+      color: typeDocument.color,
+    }
   }
 
   public static casts(dataArray: object[]): TypeDocumentList[]{
