@@ -125,7 +125,7 @@ export class TypeDocumentComponent implements OnInit, OnDestroy {
     )
   }
 
-  private updateDataApi(data: TypeDocument, id: number){
+  private updateDataApi(data: TypeDocument, id: any){
     this._sweetAlertService.loadingUp()
     this._typeDocumentService.update(data, id).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
@@ -208,7 +208,7 @@ export class TypeDocumentComponent implements OnInit, OnDestroy {
     return {
       ...this._formService.modelToFormGroupData(model),
       nombre: [model.nombre || '', [Validators.required, Validators.maxLength(50)]],
-      abreviacion: [model.abreviacion || '', [Validators.required, Validators.maxLength(15)]],
+      abreviacion: ['', [Validators.required, Validators.maxLength(15)]],
       is_active: [true, [Validators.nullValidator]]
     }
   }

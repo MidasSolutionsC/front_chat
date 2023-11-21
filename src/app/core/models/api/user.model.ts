@@ -95,44 +95,62 @@ export class UserList extends Model {
 
 // Desde el inicio
 export class UserPersonSignup extends Model {
-  public id: number;
-  public nombres: string;
-  public apellido_paterno: string;
-  public apellido_materno: string;
-  public paises_id: number;
-  public tipo_documentos_id: number;
-  public documento: string;
-  public nombre_usuario: string;
-  public clave: string;
-  public identificaciones?: IdentificationDocument[];
+  public id?: string;
+  public ubigeoId?: string;
+  public ubigeo?: string;
+  public nombres?: string;
+  public apellidoPaterno?: string;
+  public apellidoMaterno?: string;
+  public typeDocumentId?: string;
+  public nroDocumento?: string;
+  public fechaNacimiento?: string;
+  public genero?: 'M' | 'F' | 'O';
+  public correo?: string;
+  public telefono?: string;
+  public direccion?: string;
+  public usuario?: string;
+  public clave?: string;
+  public typeUserId?: string;
 
   constructor(data?: object) {
     super(data);
-    this.id = this.id || 0;
-    this.nombres = this.nombres || '';
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.paises_id = this.paises_id || 0;
-    this.tipo_documentos_id = this.tipo_documentos_id || 0;
-    this.documento = this.documento || '';
-    this.nombre_usuario = this.nombre_usuario || '';
-    this.clave = this.clave || '';
-    this.identificaciones = this.identificaciones || [];
+    this.id = this.id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.ubigeo = this.ubigeo || null;
+    this.nombres = this.nombres || null;
+    this.apellidoPaterno = this.apellidoPaterno || '';
+    this.apellidoMaterno = this.apellidoMaterno || '';
+    this.typeDocumentId = this.typeDocumentId || null;
+    this.nroDocumento = this.nroDocumento || null;
+    this.fechaNacimiento = this.fechaNacimiento || null;
+    this.genero = this.genero || null;
+    this.correo = this.correo || null;
+    this.telefono = this.telefono || null;
+    this.direccion = this.direccion || null;
+    this.usuario = this.usuario || null;
+    this.clave = this.clave || null;
+    this.typeUserId = this.typeUserId || null;
   }
 
   public static cast(data: object): UserPersonSignup {
     const obj = new UserPersonSignup(data);
-    return { 
+    return {
       id: obj.id, 
-      nombres: obj.nombres, 
-      apellido_paterno: obj.apellido_materno, 
-      apellido_materno: obj.apellido_materno, 
-      paises_id: obj.paises_id, 
-      tipo_documentos_id: obj.tipo_documentos_id, 
-      documento: obj.documento, 
-      nombre_usuario: obj.nombre_usuario, 
+      ubigeoId: obj.ubigeoId,
+      ubigeo: obj.ubigeo,
+      nombres: obj.nombres,
+      apellidoPaterno: obj.apellidoPaterno,
+      apellidoMaterno: obj.apellidoMaterno,
+      typeDocumentId: obj.typeDocumentId,
+      nroDocumento: obj.nroDocumento,
+      fechaNacimiento: obj.fechaNacimiento,
+      genero: obj.genero,
+      correo: obj.correo,
+      telefono: obj.telefono,
+      direccion: obj.direccion,
+      usuario: obj.usuario,
       clave: obj.clave,
-      identificaciones: obj.identificaciones,
+      typeUserId: obj.typeUserId,
     };
   }
 

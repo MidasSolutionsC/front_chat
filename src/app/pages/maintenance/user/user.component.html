@@ -75,7 +75,7 @@
                       <li class="list-group-item p-1 font-size-11" *ngFor="let identificacion of data?.identificaciones" [ngClass]="{'fw-bold': identificacion.is_primary}">{{identificacion.tipo_documentos_abreviacion}} {{identificacion.documento}}</li>
                     </ul>
                   </td>
-                  <td>{{data.nombre_usuario}}</td>
+                  <td>{{data.usuario}}</td>
                   <td>{{data.tipo_usuarios_nombre}}</td>
                   <!-- <td><span class="badge text-md bg-info">{{data.nombre_tipo_usuario}}</span></td> -->
                   <td><span class="badge text-md" [ngClass]="{ 'bg-success': data.is_active == 1, 'bg-danger': data.is_active == 0}">{{data.is_active? 'Activo': 'Inactivo'}}</span></td>

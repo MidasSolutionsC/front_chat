@@ -52,36 +52,31 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initForm();
-    this.apiCountryList();
     this.apiTypeDocumentList();
+    // this.apiCountryList();
 
     // Tipo de documentosl
     this.subscription.add(
       this._typeDocumentService.typeDocuments$
       .pipe(distinctUntilChanged())
-      .pipe(
-        distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
-            )
-          )
           .subscribe((list: TypeDocumentList[]) => {
             this.listDocuments = list;
       })
     );
 
     // Países
-    this.subscription.add(
-      this._countryService.listObserver$
-      .pipe(distinctUntilChanged())
-      .pipe(
-        distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
-            )
-          )
-          .subscribe((list: CountryList[]) => {
-            this.listCountries = list;
-      })
-    );
+    // this.subscription.add(
+    //   this._countryService.listObserver$
+    //   .pipe(distinctUntilChanged())
+    //   .pipe(
+    //     distinctUntilChanged((prevList, currentList) =>
+    //         prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
+    //         )
+    //       )
+    //       .subscribe((list: CountryList[]) => {
+    //         this.listCountries = list;
+    //   })
+    // );
   }
 
 
@@ -155,8 +150,9 @@ export class SignupComponent implements OnInit, OnDestroy {
   // Tipo documento
   public apiTypeDocumentList(forceRefresh: boolean = false){
     this._sweetAlertService.loadingUp('Obteniendo datos')
-    this._typeDocumentService.getAll(forceRefresh).subscribe((response: ResponseApi) => {
+    this._typeDocumentService.getAll(forceRefresh).subscribe((response: any) => {
       this._sweetAlertService.stop();
+      this.listDocuments = response;
       if(response.code == 200){
         this.listDocuments = response.data;
       }
@@ -217,12 +213,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     return {
       ...this._formService.modelToFormGroupData(model),
       nombres: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-      apellido_paterno: ['', [Validators.required, Validators.maxLength(50)]],
-      apellido_materno: ['', [Validators.required, Validators.maxLength(50)]],
-      paises_id: ['', [Validators.required, Validators.min(1)]],
-      tipo_documentos_id: ['', [Validators.required, Validators.min(1)]],
-      documento: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
-      nombre_usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern(/^[^\s]+$/)]],
+      apellidoPaterno: ['', [Validators.required, Validators.maxLength(50)]],
+      apellidoMaterno: ['', [Validators.required, Validators.maxLength(50)]],
+      typeDocumentId: ['', [Validators.required, Validators.min(1)]],
+      nroDocumento: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
+      usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern(/^[^\s]+$/)]],
       clave: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       clave_confirmation: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
     }
@@ -241,7 +236,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     } else {
       const values: UserPersonSignup = this.signupForm.value;
-      values.identificaciones = [{tipo_documentos_id: values.tipo_documentos_id, documento: values.documento, is_primary: 1}];
+      console.log(values)
 
       this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar su cuenta de usuario?').then((confirm) => {
         if(confirm.isConfirmed){
