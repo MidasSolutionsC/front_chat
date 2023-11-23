@@ -261,8 +261,8 @@ export class CallComponent {
       .subscribe((response: ResponsePagination) => {
         if(response.code == 200){
           this.pagination = Pagination.cast(response.data);
-          this.lists = response.data.data;
-          this.page = response.data.current_page;
+          // this.lists = response.data.data;
+          // this.page = response.data.current_page;
           this.total = response.data.total;
         }
         

@@ -319,6 +319,11 @@
         "label": "Apellido materno",
         "placeholder": "Ingrese el apellido materno..."
       },
+      "gender": {
+        "label": "Género",
+        "placeholder": "Ingrese el género...",
+        "default_option": "Seleccione un género..."
+      },
       "email": {
         "label": "Correo electrónico",
         "placeholder": "Ingrese el correo electrónico..."

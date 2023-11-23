@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
 import { distinctUntilChanged, first } from 'rxjs/operators';
-import { ApiErrorFormattingService, CountryService, FormService, LanguageService, SweetAlertService, TypeDocumentService, UserService } from 'src/app/core/services';
+import { ApiErrorFormattingService, AuthService, CountryService, FormService, LanguageService, SweetAlertService, TypeDocumentService, UserService } from 'src/app/core/services';
 import { CountryList, UserPersonSignup } from 'src/app/core/models';
 import { Subscription } from 'rxjs';
 import { ResponseApi, TypeDocumentList } from 'src/app/core/models';
@@ -39,6 +39,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     private cookieService: CookieService,
     private _typeDocumentService: TypeDocumentService,
     private _countryService: CountryService,
+    private _authService: AuthService,
     private _userService: UserService,
     private _formService: FormService,
     private _apiErrorFormattingService: ApiErrorFormattingService,
@@ -143,6 +144,38 @@ export class SignupComponent implements OnInit, OnDestroy {
     )
   }
 
+  // Tipo documento
+  public apiAuthCreateAccount(data: any){
+    this._sweetAlertService.loadingUp('Obteniendo datos')
+    this._authService.createAccount(data).subscribe((response: any) => {
+      this._sweetAlertService.stop();
+      if(response.code == 201){
+        const result = response.data;
+        const {access_token, user} = result
+        console.log(result)
+
+        const dataUser = {user: user, person: user.personId};
+        localStorage.setItem('dataUser', JSON.stringify(dataUser));
+
+        if(access_token){  
+          this.cookieService.set('token_auth', access_token);
+        }
+
+        this.router.navigate(['/main']);
+      }
+
+      if(response.code == 400 || response.code == 500){
+        if(response.errors){
+          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+        }
+      }
+    }, (error: any) => {
+      this._sweetAlertService.stop();
+      console.log(error);
+    });
+  }
+  
+
 
   /**
    * OPERACIONES DE TABLAS FORÁNEAS
@@ -217,6 +250,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       apellidoMaterno: ['', [Validators.required, Validators.maxLength(50)]],
       typeDocumentId: ['', [Validators.required, Validators.min(1)]],
       nroDocumento: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
+      genero: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(1) ]],
       usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern(/^[^\s]+$/)]],
       clave: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       clave_confirmation: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
@@ -229,18 +263,25 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   onSubmit() {
     this.submitted = true;
+    
 
     // stop here if form is invalid
     if (this.signupForm.invalid) {
       this._sweetAlertService.showTopEnd({title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500});
       return;
     } else {
-      const values: UserPersonSignup = this.signupForm.value;
+      const values: any = this.signupForm.value;
       console.log(values)
+      
+      // VALIDAR CLAVE DE CONFIRMACIÓN
+      if(values.clave != values.clave_confirmation){
+        this._sweetAlertService.showTopEnd({title: 'Validación de datos', message: 'La contraseñas no coinciden', type: 'warning', timer: 1500});
+        return
+      }
 
       this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar su cuenta de usuario?').then((confirm) => {
         if(confirm.isConfirmed){
-          this.saveDataApi(values);
+          this.apiAuthCreateAccount(values);
         }
       });
     }

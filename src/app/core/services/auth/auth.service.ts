@@ -26,6 +26,11 @@ export class AuthService {
     return this.configService.requestOptions;
   }
 
+  public createAccount(data: any): Observable<ResponseApi> {
+    const endpoint = `${this.baseUrl}/create-account`;
+    return this.http.post(endpoint, data, this.requestOptions).pipe(map((res: ResponseApi) => res));
+  }
+
   public login(data: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/login`;
     return this.http.post(endpoint, data, this.requestOptions).pipe(map((res: ResponseApi) => {

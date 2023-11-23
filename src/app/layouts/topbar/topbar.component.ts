@@ -6,7 +6,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { LanguageService } from '../../core/services/config/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/services';
-import { ResponseApi, User } from 'src/app/core/models';
+import { ResponseApi, User, UserList } from 'src/app/core/models';
+
+import * as jwt from 'jsonwebtoken';
 
 @Component({
   selector: 'app-topbar',
@@ -25,7 +27,7 @@ export class TopbarComponent implements OnInit {
   countryName;
   valueset;
 
-  dataUser: User;
+  dataUser: UserList;
 
   constructor(
     @Inject(DOCUMENT) private document: any,
@@ -73,7 +75,16 @@ export class TopbarComponent implements OnInit {
   }
 
 
-  getDataUserSession() {
+  async getDataUserSession() {
+    // const token = this._cookiesService.get('token_auth');
+    
+    // try {
+    //   const decodedToken = await jwt.verify(token, 'CHAT_MIDAS_2023');
+    //   console.log('Token Decodificado:', decodedToken);
+    // } catch (error) {
+    //   console.error('Error al decodificar el token:', error.message);
+    // }
+        
     const dataSession = localStorage.getItem('dataUser');
     if (dataSession) {
       const data = JSON.parse(dataSession);
@@ -101,15 +112,15 @@ export class TopbarComponent implements OnInit {
    * Logout the user
    */
   logout() {
-    if (this.dataUser) {
-      this._authService.logout(this?.dataUser?.id).subscribe((response: ResponseApi) => {
-        if (response.code == 200) {
-          this.router.navigate(['/account/login']);
-        }
-      });
-    } else {
-      this.router.navigate(['/account/login']);
-    }
+    // if (this.dataUser) {
+    //   this._authService.logout(this?.dataUser?._id).subscribe((response: ResponseApi) => {
+    //     if (response.code == 200) {
+    //       this.router.navigate(['/account/login']);
+    //     }
+    //   });
+    // } else {
+    // }
+    this.router.navigate(['/account/login']);
   }
 
   /**

@@ -56,10 +56,8 @@ export class UserService {
   }
 
   public getPagination(data: any): Observable<ResponseApi> {
-    const queryParams = new URLSearchParams();
-    queryParams.set('data', JSON.stringify(data));
-    const endpoint = `${this.baseUrl}/index?${queryParams.toString()}`;
-    return this.http.get(endpoint).pipe(map((res: ResponseApi) => res))
+    const endpoint = `${this.baseUrl}/list`;
+    return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
 
   public getServerSide(data: any): Observable<ResponseApi> {
@@ -83,7 +81,7 @@ export class UserService {
 
   public update(data: any, id: any): Observable<ResponseApi>{
     const endpoint = `${this.baseUrl}/update/${id}`;
-    return this.http.put(endpoint, data).pipe(map((res: ResponseApi) => res))
+    return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
 
   public delete(id: any): Observable<ResponseApi>{
@@ -115,7 +113,7 @@ export class UserService {
   // Método para modificar un objeto en el array
   updateObjectObserver(userPersonList: UserPersonList) {
     const currentData = this.listSubject.getValue();
-    const index = currentData.findIndex(item => item.id === userPersonList.id);
+    const index = currentData.findIndex(item => item._id === userPersonList._id);
     if (index !== -1) {
       currentData[index] = userPersonList;
       this.listSubject.next(currentData);
@@ -125,7 +123,7 @@ export class UserService {
   // Método para quitar un objeto del array
   removeObjectObserver(id: any) {
     const currentData = this.listSubject.getValue();
-    const updatedData = currentData.filter(item => item.id !== id);
+    const updatedData = currentData.filter(item => item._id !== id);
     this.listSubject.next(updatedData);
   }
 }

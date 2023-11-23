@@ -27,7 +27,7 @@ export class TypeUserService {
 
 
   private get baseUrl(){
-    return this.configService.apiUrl + 'typeUser';
+    return this.configService.apiUrl + 'type-user';
   }
 
   private get requestOptions(){
