@@ -97,7 +97,23 @@
                   </div>
                 </div>
                 <div class="row g-2">
-                  <div class="col-md-7 mb-3" *ngIf="'FORMS.FIELD_NAMES.type_document.label' | translate as translatedLabel;">
+                  <div class="col-lg-3 mb-3" *ngIf="'FORMS.FIELD_NAMES.gender.label' | translate as translatedLabel;">
+                    <label for="genero" class="form-label">{{translatedLabel}} *</label>
+                    <select class="form-select custom-select" id="genero" formControlName="genero" [ngClass]="{ 'is-invalid': f.genero.errors && (f.genero.dirty || f.genero.touched || submitted) }">
+                      <option value="">{{'FORMS.FIELD_NAMES.gender.default_option' | translate}}</option>
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                      <option value="O">Otro</option>
+                    </select>
+
+                    <!-- <input type="text" id="apellidoMaterno" class="form-control" placeholder="{{'FORMS.FIELD_NAMES.type_document.placeholder' | translate}}" formControlName="apellidoMaterno" [ngClass]="{ 'is-invalid': f.apellidoMaterno.errors && (f.apellidoMaterno.dirty || f.apellidoMaterno.touched || submitted) }" /> -->
+                    <div *ngIf="f.genero.errors && (f.genero.dirty || f.genero.touched || submitted)" class="invalid-feedback" align="left">
+                      <div *ngIf="f.genero.errors.required">
+                        {{'FORMS.VALIDATION.required' | translate | replaceAttribute:':attribute': translatedLabel}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-5 mb-3" *ngIf="'FORMS.FIELD_NAMES.type_document.label' | translate as translatedLabel;">
                     <label for="typeDocumentId" class="form-label">{{translatedLabel}} *</label>
                     <select class="form-select custom-select" id="typeDocumentId" formControlName="typeDocumentId" [ngClass]="{ 'is-invalid': f.typeDocumentId.errors && (f.typeDocumentId.dirty || f.typeDocumentId.touched || submitted) }">
                       <option value="">{{'FORMS.FIELD_NAMES.type_document.default_option' | translate}}</option>
@@ -111,7 +127,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-5 mb-3" *ngIf="'FORMS.FIELD_NAMES.document.label' | translate as translatedLabel;">
+                  <div class="col-lg-4 mb-3" *ngIf="'FORMS.FIELD_NAMES.document.label' | translate as translatedLabel;">
                     <label for="nroDocumento" class="form-label">{{translatedLabel}} *</label>
                     <input type="text" maxlength="11" id="nroDocumento" class="form-control" placeholder="{{'FORMS.FIELD_NAMES.document.placeholder' | translate}}" formControlName="nroDocumento" [ngClass]="{ 'is-invalid': f.nroDocumento.errors && (f.nroDocumento.dirty || f.nroDocumento.touched || submitted) }" />
                     <div *ngIf="f.nroDocumento.errors && (f.nroDocumento.dirty || f.nroDocumento.touched || submitted)" class="invalid-feedback" align="left">

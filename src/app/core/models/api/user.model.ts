@@ -2,44 +2,36 @@ import { IdentificationDocument, IdentificationDocumentList } from "./identifica
 import { Model } from "./model";
 
 export class User extends Model {
-  public id: number;
-  public personas_id: number;
-  public tipo_usuarios_id: number;
-  public tipo_usuario: string;
-  public nombre_usuario: string;
+  public id: string;
+  public personasId: string;
+  public typeUserId: string;
+  public usuario: string;
   public clave: string;
-  public foto_perfil: string;
-  public session_activa: boolean;
-  public is_active: boolean;
-  public ultima_conexion: string;
-  public api_token: string;
-  public expires_at: string;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
+  public perfiles: any[];
+  public portadas: any[];
 
   constructor(data?: object) {
     super(data);
-    this.id = this.id || 0;
-    this.personas_id = this.personas_id || 0;
-    this.tipo_usuarios_id = this.tipo_usuarios_id || 0;
-    this.nombre_usuario = this.nombre_usuario || '';
+    this.id = this.id || null;
+    this.personasId = this.personasId || null;
+    this.typeUserId = this.typeUserId || null;
+    this.usuario = this.usuario || '';
     this.clave = this.clave || '';
-    this.foto_perfil = this.foto_perfil || '';
-    this.session_activa = this.session_activa || false;
-    this.is_active = this.is_active || false;
-    this.ultima_conexion = this.ultima_conexion || '';
-    this.api_token = this.api_token || '';
-    this.expires_at = this.expires_at || '';
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
-    this.tipo_usuario = this.tipo_usuario || '';
-
+    this.perfiles = this.perfiles || [];
+    this.portadas = this.portadas || [];
   }
 
   public static cast(data: object): User {
-    return new User(data);
+    const obj = new User(data);
+    return {
+      id: obj.id,
+      personasId: obj.personasId,
+      typeUserId: obj.typeUserId,
+      usuario: obj.usuario,
+      clave: obj.clave,
+      perfiles: obj.perfiles,
+      portadas: obj.portadas,
+    }
   }
 
   public static casts(dataArray: object[]): User[] {
@@ -48,47 +40,39 @@ export class User extends Model {
 }
 
 export class UserList extends Model {
-  public id: number;
-  public personas_id: number;
-  public tipo_usuarios_id: number;
-  public tipo_usuario: string;
-  public nombre_usuario: string;
+  public _id: string;
+  public personId: any;
+  public typeUserId: any;
+  public usuario: string;
   public clave: string;
-  public foto_perfil: string;
-  public session_activa: boolean;
-  public is_active: boolean;
-  public ultima_conexion: string;
-  public api_token: string;
-  public expires_at: string;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
+  public perfiles: any[];
+  public portadas: any[];
 
   constructor(data?: object) {
     super(data);
-    this.id = this.id || 0;
-    this.personas_id = this.personas_id || 0;
-    this.tipo_usuarios_id = this.tipo_usuarios_id || 0;
-    this.nombre_usuario = this.nombre_usuario || '';
+    this._id = this._id || null;
+    this.personId = this.personId || null;
+    this.typeUserId = this.typeUserId || null;
+    this.usuario = this.usuario || '';
     this.clave = this.clave || '';
-    this.foto_perfil = this.foto_perfil || '';
-    this.session_activa = this.session_activa || false;
-    this.is_active = this.is_active || false;
-    this.ultima_conexion = this.ultima_conexion || '';
-    this.api_token = this.api_token || '';
-    this.expires_at = this.expires_at || '';
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
-    this.tipo_usuario = this.tipo_usuario || '';
-
+    this.perfiles = this.perfiles || [];
+    this.portadas = this.portadas || [];
   }
 
-  public static cast(data: object): User {
-    return new UserList(data);
+  public static cast(data: object): UserList {
+    const obj = new UserList(data);
+    return {
+      _id: obj._id,
+      personId: obj.personId,
+      typeUserId: obj.typeUserId,
+      usuario: obj.usuario,
+      clave: obj.clave,
+      perfiles: obj.perfiles,
+      portadas: obj.portadas,
+    }
   }
 
-  public static casts(dataArray: object[]): User[] {
+  public static casts(dataArray: object[]): UserList[] {
     return dataArray.map((data) => UserList.cast(data));
   }
 }
@@ -161,37 +145,64 @@ export class UserPersonSignup extends Model {
 
 // Desde el main
 export class UserPerson extends Model {
-  public id: number;
-  public nombres: string;
-  public apellido_paterno: string;
-  public apellido_materno: string;
-  public paises_id: number;
-  public tipo_usuarios_id: number;
-  public tipo_documentos_id: number;
-  public documento: string;
-  public nombre_usuario: string;
-  public clave: string;
-  public identificaciones?: IdentificationDocument[];
+  public _id?: string;
+  public ubigeoId?: string;
+  public ubigeo?: string;
+  public personId?: string;
+  public nombres?: string;
+  public apellidoPaterno?: string;
+  public apellidoMaterno?: string;
+  public typeDocumentId?: string;
+  public nroDocumento?: string;
+  public fechaNacimiento?: string;
+  public genero?: 'M' | 'F' | 'O';
+  public correo?: string;
+  public telefono?: string;
+  public direccion?: string;
+  public usuario?: string;
+  public clave?: string;
+  public typeUserId?: string;
 
   constructor(data?: object) {
     super(data);
-    this.id = this.id || 0;
-    this.nombres = this.nombres || '';
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.paises_id = this.paises_id || 0;
-    this.tipo_usuarios_id = this.tipo_usuarios_id || 0;
-    this.tipo_documentos_id = this.tipo_documentos_id || 0;
-    this.documento = this.documento || '';
-    this.nombre_usuario = this.nombre_usuario || '';
-    this.clave = this.clave || '';
-    this.identificaciones = this.identificaciones || [];
+    this._id = this._id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.ubigeo = this.ubigeo || null;
+    this.nombres = this.nombres || null;
+    this.apellidoPaterno = this.apellidoPaterno || '';
+    this.apellidoMaterno = this.apellidoMaterno || '';
+    this.typeDocumentId = this.typeDocumentId || null;
+    this.nroDocumento = this.nroDocumento || null;
+    this.fechaNacimiento = this.fechaNacimiento || null;
+    this.genero = this.genero || null;
+    this.correo = this.correo || null;
+    this.telefono = this.telefono || null;
+    this.direccion = this.direccion || null;
+    this.usuario = this.usuario || null;
+    this.clave = this.clave || null;
+    this.typeUserId = this.typeUserId || null;
   }
 
   public static cast(data: object): UserPerson {
-    const userPerson = new UserPerson(data);
-    const { id, nombres, apellido_paterno, apellido_materno, paises_id, tipo_usuarios_id, tipo_documentos_id, documento, nombre_usuario, clave, identificaciones } = userPerson;
-    return { id, nombres, apellido_paterno, apellido_materno, paises_id, tipo_usuarios_id, tipo_documentos_id, documento, nombre_usuario, clave, identificaciones };
+    const obj = new UserPerson(data);
+    return {
+      _id: obj._id, 
+      ubigeoId: obj.ubigeoId,
+      ubigeo: obj.ubigeo,
+      nombres: obj.nombres,
+      apellidoPaterno: obj.apellidoPaterno,
+      apellidoMaterno: obj.apellidoMaterno,
+      typeDocumentId: obj.typeDocumentId,
+      nroDocumento: obj.nroDocumento,
+      fechaNacimiento: obj.fechaNacimiento,
+      genero: obj.genero,
+      correo: obj.correo,
+      telefono: obj.telefono,
+      direccion: obj.direccion,
+      usuario: obj.usuario,
+      clave: obj.clave,
+      typeUserId: obj.typeUserId,
+    };
   }
 
   public static casts(dataArray: object[]): UserPerson[] {
@@ -201,72 +212,62 @@ export class UserPerson extends Model {
 
 
 export class UserPersonList extends Model {
-  public id: number;
-  public index: number;
-  public nombres: string;
-  public apellido_paterno: string;
-  public apellido_materno: string;
-  public paises_id: number;
-  public personas_id: number;
-  public tipo_usuarios_id: number;
-  public tipo_documentos_id: number;
-  public paises_nombre: string;
-  public tipo_usuarios_nombre: string;
-  public tipo_documentos_abreviacion: string;
-  public documento: string;
-  public nombre_usuario: string;
-  public is_active: boolean;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
-  public identificaciones?: IdentificationDocumentList[];
-
+  public _id?: string;
+  public ubigeoId?: string;
+  public ubigeo?: string;
+  public nombres?: string;
+  public apellidoPaterno?: any;
+  public apellidoMaterno?: any;
+  public typeDocumentId?: any;
+  public nroDocumento?: string;
+  public fechaNacimiento?: string;
+  public genero?: 'M' | 'F' | 'O';
+  public correo?: string;
+  public telefono?: string;
+  public direccion?: string;
+  public usuario?: string;
+  public clave?: string;
+  public typeUserId?: string;
 
   constructor(data?: object) {
     super(data);
-    this.id = this.id || 0;
-    this.index = this.index || 0;
-    this.nombres = this.nombres || '';
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.paises_id = this.paises_id || 0;
-    this.personas_id = this.personas_id || 0;
-    this.tipo_usuarios_id = this.tipo_usuarios_id || 0;
-    this.tipo_documentos_id = this.tipo_documentos_id || 0;
-    this.paises_nombre = this.paises_nombre || '';
-    this.tipo_usuarios_nombre = this.tipo_usuarios_nombre || '';
-    this.tipo_documentos_abreviacion = this.tipo_documentos_abreviacion || '';
-    this.documento = this.documento || '';
-    this.nombre_usuario = this.nombre_usuario || '';;
-    this.is_active = this.is_active || false;
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
-    this.identificaciones = this.identificaciones || [];
+    this._id = this._id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.ubigeo = this.ubigeo || null;
+    this.nombres = this.nombres || null;
+    this.apellidoPaterno = this.apellidoPaterno || '';
+    this.apellidoMaterno = this.apellidoMaterno || '';
+    this.typeDocumentId = this.typeDocumentId || null;
+    this.nroDocumento = this.nroDocumento || null;
+    this.fechaNacimiento = this.fechaNacimiento || null;
+    this.genero = this.genero || null;
+    this.correo = this.correo || null;
+    this.telefono = this.telefono || null;
+    this.direccion = this.direccion || null;
+    this.usuario = this.usuario || null;
+    this.clave = this.clave || null;
+    this.typeUserId = this.typeUserId || null;
   }
 
   public static cast(data: object): UserPersonList {
     const obj = new UserPersonList(data);
     return {
-      id: obj.id,
-      index: obj.index,
+      _id: obj._id, 
+      ubigeoId: obj.ubigeoId,
+      ubigeo: obj.ubigeo,
       nombres: obj.nombres,
-      apellido_paterno: obj.apellido_paterno,
-      apellido_materno: obj.apellido_materno,
-      paises_id: obj.paises_id,
-      personas_id: obj.personas_id,
-      tipo_usuarios_id: obj.tipo_usuarios_id,
-      tipo_documentos_id: obj.tipo_documentos_id,
-      paises_nombre: obj.paises_nombre,
-      tipo_usuarios_nombre: obj.tipo_usuarios_nombre,
-      tipo_documentos_abreviacion: obj.tipo_documentos_abreviacion,
-      documento: obj.documento,
-      nombre_usuario: obj.nombre_usuario,
-      is_active: obj.is_active,
-      created_at: obj.created_at,
-      updated_at: obj.updated_at,
-      deleted_at: obj.deleted_at,
-      identificaciones: obj.identificaciones,
+      apellidoPaterno: obj.apellidoPaterno,
+      apellidoMaterno: obj.apellidoMaterno,
+      typeDocumentId: obj.typeDocumentId,
+      nroDocumento: obj.nroDocumento,
+      fechaNacimiento: obj.fechaNacimiento,
+      genero: obj.genero,
+      correo: obj.correo,
+      telefono: obj.telefono,
+      direccion: obj.direccion,
+      usuario: obj.usuario,
+      clave: obj.clave,
+      typeUserId: obj.typeUserId,
     };
   }
 
