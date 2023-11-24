@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Subscription, distinctUntilChanged } from 'rxjs';
-import { Breadcrumb, Campus, CampusList, CountryList, ResponseApi } from 'src/app/core/models';
+import { BehaviorSubject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Breadcrumb, Campus, CampusList, CountryList, Pagination, PaginationResult, ResponseApi } from 'src/app/core/models';
 import { UbigeoList } from 'src/app/core/models/api/maintenance/ubigeo.model';
 import { ApiErrorFormattingService, CampusService, CountryService, FormService, SweetAlertService, UbigeoService } from 'src/app/core/services';
 import { FileUploadUtil } from 'src/app/core/helpers';
@@ -23,20 +23,32 @@ export class CampusComponent {
   // bread crumb items
   titleBreadCrumb: string = 'Sedes';
   breadCrumbItems: Array<{}>;
-  
+
   // Form 
   isNewData: boolean = true;
   submitted: boolean = false;
   campusForm: FormGroup;
 
+  // PAGINACIÓN
+  countElements: number[] = [2, 5, 10, 25, 50, 100];
+  pagination: BehaviorSubject<Pagination> = new BehaviorSubject<Pagination>({
+    page: 1,
+    limit: 10,
+    search: '',
+    column: '',
+    order: 'desc',
+  });
+
+  paginationResult: PaginationResult = new PaginationResult();
+
 
   // Table data
   // content?: any;
   lists?: CampusList[];
-  
+
   // Paises
   listCountries?: CountryList[];
-  
+
   // Paises
   selectedOptionUbigeo: any;
   listUbigeos?: UbigeoList[];
@@ -46,11 +58,11 @@ export class CampusComponent {
 
   // Previsualizar foto subido
   previewImage: any;
-  
+
   private subscription: Subscription = new Subscription();
 
   constructor(
-    private modalService: BsModalService, 
+    private modalService: BsModalService,
     private _countryService: CountryService,
     private _ubigeoService: UbigeoService,
     private _campusService: CampusService,
@@ -62,62 +74,108 @@ export class CampusComponent {
   }
 
   ngOnInit(): void {
-    this.breadCrumbItems = Breadcrumb.casts([{ label: 'Mantenimiento'}, { label: 'Man. de tipos'}, { label: 'Tipos de servicios', active: true }]);
+    this.breadCrumbItems = Breadcrumb.casts([{ label: 'Mantenimiento' }, { label: 'Man. de tipos' }, { label: 'Tipos de servicios', active: true }]);
     this.initForm();
 
-    this.listDataApi();
+    // this.listDataApi();
+    this.apiCampusListPagination()
     this.apiCountryList();
     this.searchOptionUbigeo('');
 
     this.subscription.add(
       this._campusService.listObserver$
-      // .pipe(distinctUntilChanged())
-      .pipe(
-        distinctUntilChanged(
-          (prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
-        )
-      )
-      .subscribe((list: CampusList[]) => {
-        this.lists = list;
-      })
+        .pipe(distinctUntilChanged())
+        .subscribe((list: CampusList[]) => {
+          this.lists = list;
+        })
     );
 
-    // Países
+
+    // PAGINACIÓN
     this.subscription.add(
-      this._countryService.listObserver$
-      .pipe(distinctUntilChanged())
-      .pipe(
-        distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
-            )
-          )
-          .subscribe((list: CountryList[]) => {
-            this.listCountries = list;
-      })
+      this.pagination.asObservable()
+        // .pipe(distinctUntilChanged())
+        .subscribe((pagination: Pagination) => {
+          this.apiCampusListPagination()
+        })
     );
+    
+    // Países
+    // this.subscription.add(
+    //   this._countryService.listObserver$
+    //   .pipe(distinctUntilChanged())
+    //   .pipe(
+    //     distinctUntilChanged((prevList, currentList) =>
+    //         prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
+    //         )
+    //       )
+    //       .subscribe((list: CountryList[]) => {
+    //         this.listCountries = list;
+    //   })
+    // );
+    
   }
-  
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+
+  /**
+ * ***************************************************************
+ * SERVER SIDE - USERS
+ * ***************************************************************
+ */
+  apiCampusListPagination(): void {
+    this.subscription.add(
+      this._campusService.getPagination(this.pagination.getValue())
+        .pipe(debounceTime(250))
+        .subscribe((response: ResponseApi) => {
+          if (response.code == 200) {
+            this.paginationResult = PaginationResult.cast(response.data);
+            this.lists = response.data.results;
+          }
+
+          if (response.code == 500) {
+            if (response.errors) {
+              this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
+            }
+          }
+        }, (error: any) => {
+          if (error.message) {
+            this._sweetAlertService.showTopEnd({ type: 'error', title: 'Error al cargar usuarios', message: error.message, timer: 2500 });
+          }
+        })
+    );
+  }
+
+  getPage(event: any) {
+    const { page, itemsPerPage: limit } = event;
+    this.pagination.next({ ...this.pagination.getValue(), page, limit })
+  }
+
+  getPageRefresh() {
+    this.pagination.next({ ...this.pagination.getValue(), page: 1, limit: 10 })
+  }
+
+
 
   /**
    * ****************************************************************
    * OPERACIONES CON LA API
    * ****************************************************************
    */
-  public listDataApi(forceRefresh: boolean = false){
+  public listDataApi(forceRefresh: boolean = false) {
     this._sweetAlertService.loadingUp('Obteniendo datos')
     this._campusService.getAll(forceRefresh).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
-      if(response.code == 200){
+      if (response.code == 200) {
         this.lists = response.data;
       }
 
-      if(response.code == 500){
-        if(response.errors){
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
         }
       }
     }, (error: any) => {
@@ -126,13 +184,13 @@ export class CampusComponent {
     });
   }
 
-  private saveDataApi(data: Campus | FormData){
+  private saveDataApi(data: Campus | FormData) {
     this._sweetAlertService.loadingUp()
     this.subscription.add(
       this._campusService.register(data).subscribe((response: ResponseApi) => {
         this._sweetAlertService.stop();
-        if(response.code == 201){
-          if(response.data[0]){
+        if (response.code == 201) {
+          if (response.data[0]) {
             const data: CampusList = CampusList.cast(response.data[0]);
             this._campusService.addObjectObserver(data);
           }
@@ -140,16 +198,16 @@ export class CampusComponent {
           this.modalRef?.hide();
         }
 
-        if(response.code == 422){
-          if(response.errors){
+        if (response.code == 422) {
+          if (response.errors) {
             const textErrors = this._apiErrorFormattingService.formatAsHtml(response.errors);
-            this._sweetAlertService.showTopEnd({type: 'error', title: response.message, message: textErrors});
+            this._sweetAlertService.showTopEnd({ type: 'error', title: response.message, message: textErrors });
           }
         }
 
-        if(response.code == 500){
-          if(response.errors){
-            this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+        if (response.code == 500) {
+          if (response.errors) {
+            this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
           }
         }
       }, (error) => {
@@ -159,26 +217,26 @@ export class CampusComponent {
     )
   }
 
-  private updateDataApi(data: Campus | FormData, id: number){
+  private updateDataApi(data: Campus | FormData, id: any) {
     this._sweetAlertService.loadingUp()
     this._campusService.update(data, id).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
-      if(response.code == 200){
+      if (response.code == 200) {
         const data: CampusList = CampusList.cast(response.data[0]);
         this._campusService.updateObjectObserver(data);
         this.modalRef?.hide();
       }
 
-      if(response.code == 422){
-        if(response.errors){
+      if (response.code == 422) {
+        if (response.errors) {
           const textErrors = this._apiErrorFormattingService.formatAsHtml(response.errors);
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.message, message: textErrors});
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.message, message: textErrors });
         }
       }
 
-      if(response.code == 500){
-        if(response.errors){
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
         }
       }
     }, (error: ResponseApi) => {
@@ -187,25 +245,25 @@ export class CampusComponent {
     });
   }
 
-  private deleteDataApi(id: number){
+  private deleteDataApi(id: number) {
     this._sweetAlertService.loadingUp()
     this._campusService.delete(id).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
-      if(response.code == 200){
+      if (response.code == 200) {
         const data: CampusList = CampusList.cast(response.data[0]);
-        this._campusService.removeObjectObserver(data.id);
+        this._campusService.removeObjectObserver(data._id);
       }
 
-      if(response.code == 422){
-        if(response.errors){
+      if (response.code == 422) {
+        if (response.errors) {
           const textErrors = this._apiErrorFormattingService.formatAsHtml(response.errors);
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.message, message: textErrors});
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.message, message: textErrors });
         }
       }
 
-      if(response.code == 500){
-        if(response.errors){
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
         }
       }
     }, (error: ResponseApi) => {
@@ -218,17 +276,17 @@ export class CampusComponent {
    * OPERACIONES DE TABLAS FORÁNEAS
    */
   // Países
-  public apiCountryList(forceRefresh: boolean = false){
+  public apiCountryList(forceRefresh: boolean = false) {
     this._sweetAlertService.loadingUp('Obteniendo datos')
     this._countryService.getAll(forceRefresh).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
-      if(response.code == 200){
+      if (response.code == 200) {
         this.listCountries = response.data;
       }
 
-      if(response.code == 500){
-        if(response.errors){
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
         }
       }
     }, (error: any) => {
@@ -236,18 +294,18 @@ export class CampusComponent {
       console.log(error);
     });
   }
-  
+
   // Buscar ubigeos
   public searchOptionUbigeo(search: string) {
-    this._ubigeoService.getSearch({search}).subscribe((response: ResponseApi) => {
+    this._ubigeoService.getSearch({ search }).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
-      if(response.code == 200){
+      if (response.code == 200) {
         this.listUbigeos = response.data;
       }
 
-      if(response.code == 500){
-        if(response.errors){
-          this._sweetAlertService.showTopEnd({type: 'error', title: response.errors?.message, message: response.errors?.error});
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
         }
       }
     }, (error: any) => {
@@ -267,7 +325,7 @@ export class CampusComponent {
    * INICIAR FORMULARTO CON LAS VALIDACIONES
    * @param model 
    */
-  private initForm(){
+  private initForm() {
     const campus = new Campus();
     const formGroupData = this.getFormGroupData(campus);
     this.campusForm = this.formBuilder.group(formGroupData);
@@ -295,7 +353,7 @@ export class CampusComponent {
    * Subir archivo
   * @param fileInput elemento input
   */
-  async onFileSelected(fileInput: HTMLInputElement){
+  async onFileSelected(fileInput: HTMLInputElement) {
     const { files, error } = await FileUploadUtil.handleFileUploadBase64(fileInput, ['jpg', 'jpeg', 'png'], 0);
 
     if (files.length > 0) {
@@ -303,7 +361,7 @@ export class CampusComponent {
       this.previewImage = files[0].base64;
       this.uploadFiles = files.map((file) => file.file);
     } else {
-      this._sweetAlertService.showTopEnd({title: 'Archivo seleccionado', message: error, type: 'error', timer: 2500});
+      this._sweetAlertService.showTopEnd({ title: 'Archivo seleccionado', message: error, type: 'error', timer: 2500 });
     }
   }
 
@@ -312,7 +370,7 @@ export class CampusComponent {
    */
 
   clearFile() {
-    if(this.fileInput){
+    if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
     this.f.file.setValue(null);
@@ -326,7 +384,7 @@ export class CampusComponent {
    * @param selectedItem 
    */
   onSelectUbigeo(selectedItem: any) {
-    if(selectedItem){
+    if (selectedItem) {
       this.f.ciudad.setValue(selectedItem.ciudad);
       // this.f.ciudad.disable();
     } else {
@@ -334,8 +392,8 @@ export class CampusComponent {
       // this.f.ciudad.enable();
     }
   }
-  
-  
+
+
   /**
    * Open modal
    * @param content modal content
@@ -348,7 +406,7 @@ export class CampusComponent {
     this.previewImage = null;
     this.uploadFiles = [];
     this.modalRef = this.modalService.show(content, { class: 'modal-lg modal-dialog-scrollable' });
-    this.modalRef.onHide.subscribe(() => {});
+    this.modalRef.onHide.subscribe(() => { });
   }
 
 
@@ -356,8 +414,8 @@ export class CampusComponent {
     * Save
   */
   saveData() {
-    if(!this.campusForm.valid){
-      this._sweetAlertService.showTopEnd({title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500});
+    if (!this.campusForm.valid) {
+      this._sweetAlertService.showTopEnd({ title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500 });
     } else {
       const values: Campus = this.campusForm.value;
       const formData = new FormData();
@@ -367,26 +425,26 @@ export class CampusComponent {
         formData.append(key, values[key]);
       }
 
-      if(this.uploadFiles && this.uploadFiles.length > 0){
+      if (this.uploadFiles && this.uploadFiles.length > 0) {
         this.uploadFiles.forEach((file) => {
           formData.append('file', file);
         });
       } else {
         formData.delete('file');
       }
-      
-      if(this.isNewData){
+
+      if (this.isNewData) {
         // Crear nuevo registro
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar la sede?').then((confirm) => {
-          if(confirm.isConfirmed){
+          if (confirm.isConfirmed) {
             this.saveDataApi(formData);
           }
         });
       } else {
         // Actualizar datos
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de modificar la sede?').then((confirm) => {
-          if(confirm.isConfirmed){
-            this.updateDataApi(formData, values.id);
+          if (confirm.isConfirmed) {
+            this.updateDataApi(formData, values._id);
           }
         });
       }
@@ -399,7 +457,7 @@ export class CampusComponent {
  * Open Edit modal
  * @param content modal content
  */
-  editDataGet(id: any, content: any) {
+  editDataGet(data: any, content: any) {
     this.modalRef = this.modalService.show(content, { class: 'modal-lg modal-dialog-scrollable' });
     this.dataModal.title = 'Editar sede';
     this.isNewData = false;
@@ -407,14 +465,12 @@ export class CampusComponent {
     this.previewImage = '';
 
     // Cargando datos al formulario 
-    var data: any = this.lists.find((data: { id: any; }) => data.id === id);
-    data.paises_id = parseInt(data.paises_id);
     const campus = Campus.cast(data);
 
     this.campusForm = this.formBuilder.group({
-      ...this._formService.modelToFormGroupData(campus), 
-      id: [data.id], 
-      file: [null, []],      
+      ...this._formService.modelToFormGroupData(campus),
+      _id: [data._id],
+      file: [null, []],
     });
 
     this.searchOptionUbigeo(data.ubigeos_ciudad);
@@ -425,9 +481,9 @@ export class CampusComponent {
    * Eliminar un registro
    * @param id id del registro a eliminar
    */
-  deleteRow(id: any){
+  deleteRow(id: any) {
     this._sweetAlertService.showConfirmationAlert('¿Estas seguro de eliminar la sede?').then((confirm) => {
-      if(confirm.isConfirmed){
+      if (confirm.isConfirmed) {
         this.deleteDataApi(id);
       }
     });

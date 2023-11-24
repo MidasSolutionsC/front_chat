@@ -1,41 +1,51 @@
 import { Model } from "../model";
 
 export class Campus extends Model{
-  public id: number;
-  public paises_id: number;
-  public codigo_ubigeo: string;
+  public _id: string;
+  public ubigeoId: string
+  public inei: string
+  public ubigeo: string
   public nombre: string;
-  public ciudad: string;
+  public descripcion: string;
   public direccion: string;
-  public codigo_postal: string;
   public telefono: string;
   public correo: string;
-  public responsable: string;
-  public fecha_apertura: string;
-  public logo: string;
-  public is_active: boolean;
+  public fechaApertura: string;
+  public logo: any;
+  public typeStatusId: string;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
-    this.paises_id = this.paises_id || 0;
+    this._id = this._id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.inei = this.inei || '';
+    this.ubigeo = this.ubigeo || '';
     this.nombre = this.nombre || '';
-    this.codigo_ubigeo = this.codigo_ubigeo || '';
-    this.ciudad = this.ciudad || '';
+    this.descripcion = this.descripcion || '';
     this.direccion = this.direccion || '';
-    this.codigo_postal = this.codigo_postal || '';
     this.telefono = this.telefono || '';
     this.correo = this.correo || '';
-    this.responsable = this.responsable || '';
-    this.fecha_apertura = this.fecha_apertura || '';
-    this.logo = this.logo || '';
-    this.is_active = this.is_active || true;
+    this.fechaApertura = this.fechaApertura || '';
+    this.logo = this.logo || null;
+    this.typeStatusId = this.typeStatusId || null;
   }
 
   public static cast(data: object): Campus{
     const campus = new Campus(data);
-    const {id, paises_id, nombre, codigo_ubigeo, ciudad, direccion, codigo_postal, telefono, correo, responsable, fecha_apertura, logo, is_active} = campus;
-    return {id, paises_id, nombre, codigo_ubigeo, ciudad, direccion, codigo_postal, telefono, correo, responsable, fecha_apertura, logo, is_active};
+    return {
+      _id: campus._id,
+      ubigeoId: campus.ubigeoId,
+      inei: campus.inei,
+      ubigeo: campus.ubigeo,
+      nombre: campus.nombre,
+      descripcion: campus.descripcion,
+      direccion: campus.direccion,
+      telefono: campus.telefono,
+      correo: campus.correo,
+      fechaApertura: campus.fechaApertura,
+      logo: campus.logo,
+      typeStatusId: campus.typeStatusId,
+    }
   }
 
   public static casts(dataArray: object[]): Campus[]{
@@ -45,52 +55,51 @@ export class Campus extends Model{
 
 
 export class CampusList extends Model{
-  public id: number;
-  public paises_id: number;
-  public paises_nombre: string;
-  public ubigeos_ciudad: string;
-  public codigo_ubigeo: string;
+  public _id: string;
+  public ubigeoId: string
+  public inei: string
+  public ubigeo: string
   public nombre: string;
-  public ciudad: string;
+  public descripcion: string;
   public direccion: string;
-  public codigo_postal: string;
   public telefono: string;
   public correo: string;
-  public responsable: string;
-  public fecha_apertura: string;
-  public logo: string;
-  public is_active: boolean;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
-
+  public fechaApertura: string;
+  public logo: any;
+  public typeStatusId: any;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
-    this.paises_id = this.paises_id || 0;
+    this._id = this._id || null;
+    this.ubigeoId = this.ubigeoId || null;
+    this.inei = this.inei || '';
+    this.ubigeo = this.ubigeo || '';
     this.nombre = this.nombre || '';
-    this.paises_nombre = this.paises_nombre || '';
-    this.ubigeos_ciudad = this.ubigeos_ciudad || '';
-    this.codigo_ubigeo = this.codigo_ubigeo || '';
-    this.ciudad = this.ciudad || '';
+    this.descripcion = this.descripcion || '';
     this.direccion = this.direccion || '';
-    this.codigo_postal = this.codigo_postal || '';
     this.telefono = this.telefono || '';
     this.correo = this.correo || '';
-    this.responsable = this.responsable || '';
-    this.fecha_apertura = this.fecha_apertura || '';
-    this.logo = this.logo || '';
-    this.is_active = this.is_active || true;
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
+    this.fechaApertura = this.fechaApertura || '';
+    this.logo = this.logo || null;
+    this.typeStatusId = this.typeStatusId || null;
   }
 
   public static cast(data: object): CampusList{
-    const campusList = new CampusList(data);
-    const {id, paises_id, nombre, paises_nombre, ubigeos_ciudad, codigo_ubigeo, ciudad, direccion, codigo_postal, telefono, correo, responsable, fecha_apertura, logo, is_active, created_at, updated_at, deleted_at} = campusList;
-    return {id, paises_id, nombre, paises_nombre, ubigeos_ciudad, codigo_ubigeo, ciudad, direccion, codigo_postal, telefono, correo, responsable, fecha_apertura, logo, is_active, created_at, updated_at, deleted_at};
+    const campus = new CampusList(data);
+    return {
+      _id: campus._id,
+      ubigeoId: campus.ubigeoId,
+      inei: campus.inei,
+      ubigeo: campus.ubigeo,
+      nombre: campus.nombre,
+      descripcion: campus.descripcion,
+      direccion: campus.direccion,
+      telefono: campus.telefono,
+      correo: campus.correo,
+      fechaApertura: campus.fechaApertura,
+      logo: campus.logo,
+      typeStatusId: campus.typeStatusId,
+    }
   }
 
   public static casts(dataArray: object[]): CampusList[]{

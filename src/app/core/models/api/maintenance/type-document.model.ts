@@ -1,7 +1,7 @@
 import { Model } from "../model";
 
 export class TypeDocument extends Model{
-  public id: string;
+  public _id: string;
   public codigo: string;
   public nombre: string;
   public typeStatusId: string;
@@ -9,7 +9,7 @@ export class TypeDocument extends Model{
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || null;
+    this._id = this._id || null;
     this.nombre = this.nombre || '';
     this.typeStatusId = this.typeStatusId || '';
     this.color = this.color || null;
@@ -18,7 +18,7 @@ export class TypeDocument extends Model{
   public static cast(data: object): TypeDocument{
     const typeDocument = new TypeDocument(data);
     return {
-      id: typeDocument.id,
+      _id: typeDocument._id,
       codigo: typeDocument.codigo,
       nombre: typeDocument.nombre,
       typeStatusId: typeDocument.typeStatusId,
@@ -32,24 +32,24 @@ export class TypeDocument extends Model{
 }
 
 export class TypeDocumentList extends Model{
-  public id: string;
+  public _id: string;
   public codigo: string;
   public nombre: string;
-  public typeStatusId: string;
+  public typeStatusId: any;
   public color: string;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || null;
+    this._id = this._id || null;
     this.nombre = this.nombre || '';
-    this.typeStatusId = this.typeStatusId || '';
+    this.typeStatusId = this.typeStatusId || null;
     this.color = this.color || null;
   }
 
   public static cast(data: object): TypeDocumentList{
-    const typeDocument = new TypeDocument(data);
+    const typeDocument = new TypeDocumentList(data);
     return {
-      id: typeDocument.id,
+      _id: typeDocument._id,
       codigo: typeDocument.codigo,
       nombre: typeDocument.nombre,
       typeStatusId: typeDocument.typeStatusId,
