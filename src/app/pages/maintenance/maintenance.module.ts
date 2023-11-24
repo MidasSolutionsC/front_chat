@@ -26,12 +26,14 @@ import { ExportAsModule } from 'ngx-export-as';
 import { DataTablesModule} from 'angular-datatables';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { CoordinationComponent } from './coordination/coordination.component';
+import { ModalDetailComponent } from './coordination/modals/modal-detail/modal-detail.component';
 
 @NgModule({
   declarations: [
     UserComponent,
     CampusComponent,
     CoordinationComponent,
+    ModalDetailComponent
   ],
   imports: [
     CommonModule,

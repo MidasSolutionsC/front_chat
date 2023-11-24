@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChi
 import { Form, FormArray, FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ExportAsConfig, ExportAsService, SupportedExtensions } from 'ngx-export-as';
-import { Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
-import { Breadcrumb, CountryList, IdentificationDocument, Pagination, ResponseApi, ResponsePagination, TypeDocumentList, TypeUserList, UserList, UserPerson, UserPersonList } from 'src/app/core/models';
+import { BehaviorSubject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Breadcrumb, CountryList, IdentificationDocument, Pagination, PaginationResult, ResponseApi, ResponsePagination, TypeDocumentList, TypeUserList, UserList, UserPerson, UserPersonList } from 'src/app/core/models';
 import { ApiErrorFormattingService, CountryService, FormService, SweetAlertService, TypeDocumentService, TypeUserService, UserService } from 'src/app/core/services';
 import { CleanObject } from 'src/app/core/helpers/clean-object.util';
 
@@ -32,17 +32,28 @@ export class UserComponent implements OnInit, OnDestroy {
   isNewData: boolean = true;
   submitted: boolean = false;
   userForm: FormGroup;
-  identificationForm: FormGroup;
 
   // TABLE USUARIOS - SERVER SIDE
-  page: number = 1;
-  perPage: number = 5;
-  search: string = '';
-  column: string = '';
-  order: 'asc' | 'desc' = 'desc';
-  countElements: number[] = [5, 10, 25, 50, 100];
-  total: number = 0;
-  pagination: Pagination = new Pagination();
+  // page: number = 1;
+  // perPage: number = 5;
+  // search: string = '';
+  // column: string = '';
+  // order: 'asc' | 'desc' = 'desc';
+  // countElements: number[] = [5, 10, 25, 50, 100];
+  // total: number = 0;
+  // pagination: Pagination = new Pagination();
+
+  // PAGINACIÓN
+  countElements: number[] = [2, 5, 10, 25, 50, 100];
+  pagination: BehaviorSubject<Pagination> = new BehaviorSubject<Pagination>({
+    page: 1,
+    limit: 10,
+    search: '',
+    column: '',
+    order: 'desc',
+  });
+
+  paginationResult: PaginationResult = new PaginationResult();
 
 
   // Table data
@@ -94,12 +105,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.apiTypeDocumentList();
     this.apiTypeUserList();
     this.apiUserListPagination();
-
-    this.identificationForm = this.formBuilder.group({
-      formList: this.formBuilder.array([]),
-    }),
-
-    this.formDataIdentification.push(this.fieldIdentification());
  
     // Usuarios
     // this.subscription.add(
@@ -121,7 +126,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .pipe(distinctUntilChanged())
       .pipe(
         distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
+            prevList.map(item => item._id).join(',') === currentList.map(item => item._id).join(',')
             )
           )
           .subscribe((list: TypeDocumentList[]) => {
@@ -147,14 +152,20 @@ export class UserComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._typeUserService.listObserver$
       .pipe(distinctUntilChanged())
-      .pipe(
-        distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
-            )
-          )
           .subscribe((list: TypeUserList[]) => {
             this.listTypeUsers = list;
       })
+    );
+
+    // PAGINACIÓN
+    
+    this.subscription.add(
+      this.pagination.asObservable()
+        // .pipe(distinctUntilChanged())
+        .subscribe((pagination: Pagination) => {
+          console.log("PAGINACIÓN:", pagination)
+          this.apiUserListPagination()
+        })
     );
   }
 
@@ -334,13 +345,13 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
-  private deleteDataApi(id: number){
+  private deleteDataApi(id: string){
     this._sweetAlertService.loadingUp()
     this._userService.delete(id).subscribe((response: ResponseApi) => {
       this._sweetAlertService.stop();
       if(response.code == 200){
-        const data: UserPersonList = UserPersonList.cast(response.data[0]);
-        this._userService.removeObjectObserver(data._id);
+        const data = response.data;
+        // this._userService.removeObjectObserver(data._id);
         this.apiUserListPagination();
       }
 
@@ -370,20 +381,12 @@ export class UserComponent implements OnInit, OnDestroy {
    */
   apiUserListPagination(): void {
     this.subscription.add(
-      this._userService.getPagination({
-        page: this.page.toString(),
-        limit: this.perPage.toString(),
-        search: this.search,
-        // column: this.column,
-        // order: this.order
-      })
+      this._userService.getPagination(this.pagination.getValue())
       .pipe(debounceTime(250))
-      .subscribe((response: ResponsePagination) => {
+      .subscribe((response: ResponseApi) => {
         if(response.code == 200){
-          this.pagination = Pagination.cast(response.data);
+          this.paginationResult = PaginationResult.cast(response.data);
           this.lists = response.data.results;
-          // this.page = response.data.current_page;
-          this.total = response.data.total;
         }
         
         if(response.code == 500){
@@ -400,24 +403,12 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   getPage(event: any){
-    const {page, itemsPerPage} = event;
-    this.page = page;
-    this.perPage = itemsPerPage;
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      this.apiUserListPagination();
-    }, 0);
+    const { page, itemsPerPage: limit } = event;
+    this.pagination.next({...this.pagination.getValue(), page, limit})
   }
 
   getPageRefresh(){
-    this.page = 1;
-    this.perPage = 10;
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      this.apiUserListPagination();
-    }, 0);
+    this.pagination.next({...this.pagination.getValue(), page: 1, limit: 10})
   }
 
   
@@ -525,33 +516,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
 
-  /**
-   * *******************************************************
-   * AGREGAR MÁS CAMPOS DE TIPO Y DOCUMENTO
-   * *******************************************************
-   */
-  
-  fieldIdentification(model: IdentificationDocument = new IdentificationDocument()): FormGroup {
-    return this.formBuilder.group({
-      ...this._formService.modelToFormGroupData(model),
-      tipo_documentos_id: [model?.tipo_documentos_id || '', [Validators.required, Validators.min(1)]],
-      documento: [model?.documento, [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
-    });
-  }
-
-  get formDataIdentification(): FormArray {
-    return this.identificationForm.get('formList') as FormArray;
-  }
-
-  removeFieldIdentification(i: number) {
-    this.formDataIdentification.removeAt(i);
-  }
-
-  addFieldIdentification() {
-    this.formDataIdentification.push(this.fieldIdentification());
-  }
-  
-
   
   /**
    * Open modal
@@ -562,7 +526,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.isNewData = true;
     this.dataModal.title = 'Crear usuario';
     this.submitted = false;
-    this.modalRef = this.modalService.show(content, { class: 'modal-md modal-dialog-centered' });
+    this.modalRef = this.modalService.show(content, { class: 'modal-lg modal-dialog-centered' });
     this.modalRef.onHide.subscribe(() => {});
   }
 
@@ -575,25 +539,21 @@ export class UserComponent implements OnInit, OnDestroy {
       this._sweetAlertService.showTopEnd({title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500});
     } else {
       const values: UserPerson = this.userForm.value;
-      // Obtén el FormArray de usuarios
-      const docsArray = this.identificationForm.get('formList') as FormArray;
-      const docsValues = docsArray.getRawValue();
-      // values.identificaciones = docsValues.map((obj) => IdentificationDocument.cast(obj));
       // values.identificaciones = CleanObject.cleanArrayOfObjects(values.identificaciones);
-
+      const {_id, ...dataSend} = values
 
       if(this.isNewData){
         // Crear nuevo registro
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar el usuario?').then((confirm) => {
           if(confirm.isConfirmed){
-            this.saveDataApi(values);
+            this.saveDataApi(dataSend);
           }
         });
       } else {
         // Actualizar datos
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de modificar el usuario?').then((confirm) => {
           if(confirm.isConfirmed){
-            this.updateDataApi(values, values._id);
+            this.updateDataApi(dataSend, _id);
           }
         });
       }
@@ -606,37 +566,31 @@ export class UserComponent implements OnInit, OnDestroy {
  * Open Edit modal
  * @param content modal content
  */
-  editDataGet(id: any, content: any) {
-    this.modalRef = this.modalService.show(content, { class: 'modal-md' });
-    this.dataModal.title = 'Editar tipo de servicio';
+  editDataGet(data: any, content: any) {
+    this.openModal(content)
+    this.dataModal.title = 'Editar usuario';
     this.isNewData = false;
     this.submitted = false;
-    // Cargando datos al formulario 
-    var data = this.lists.find((data: {_id: string; }) => data._id === id);
-    console.log("EDITAR:", data)
 
     const userPerson = UserPerson.cast(data);
 
     this.userForm = this.formBuilder.group({
       ...this._formService.modelToFormGroupData(userPerson), 
       // personas_id: [data.personas_id], 
-      personId: [data?.personId?._id],
-      nombres: [data?.personId?.nombres],
-      apellidoPaterno: [data?.personId?.apellidoPaterno],
-      apellidoMaterno: [data?.personId?.apellidoMaterno],
-      genero: [data?.personId?.genero],
-      typeDocumentId: [data?.personId?.typeDocumentId?._id],
-      nroDocumento: [data?.personId?.nroDocumento],
-      typeUserId: [data?.typeUserId?._id],
+      personId: [data?.personId?._id, []],
+      nombres: [data?.personId?.nombres, []],
+      apellidoPaterno: [data?.personId?.apellidoPaterno, []],
+      apellidoMaterno: [data?.personId?.apellidoMaterno, []],
+      genero: [data?.personId?.genero, []],
+      typeDocumentId: [data?.personId?.typeDocumentId?._id, []],
+      nroDocumento: [data?.personId?.nroDocumento, []],
+      typeUserId: [data?.typeUserId?._id, []],
       clave: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       clave_confirmation: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       _id: [data._id]
     });
 
 
-    this.identificationForm = this.formBuilder.group({
-      formList: this.formBuilder.array([]),
-    });
 
     // if(data.identificaciones.length > 0){
     //   data?.identificaciones?.forEach((doc) => {

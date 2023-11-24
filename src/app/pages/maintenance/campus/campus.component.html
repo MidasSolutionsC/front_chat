@@ -9,22 +9,44 @@
             <h5 class="mb-0 card-title flex-grow-1">Listado</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a href="javascript:void(0);" class="btn btn-primary" (click)="openModal(content)">Agregar nuevo</a>
-              <a href="javascript:void(0);" (click)="listDataApi(true);" class="btn btn-light"><i class="mdi mdi-refresh"></i></a>
+              <a href="javascript:void(0);" (click)="getPageRefresh();" class="btn btn-light"><i class="mdi mdi-refresh"></i></a>
             </div>
           </div>
         </div>
         <div class="card-body border-bottom">
-
+          <h4 class="card-title">Lista de sedes</h4>
+          <p class="card-sub-title">
+            Sedes registrados hasta el momento
+          </p>
+          <div class="row mb-md-2">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_length" id="tickets-table_length"><label
+                class="d-inline-flex align-items-center">Mostrar
+                <select name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
+                  [(ngModel)]="pagination.value.limit" class="form-control form-control-sm mx-2" (change)="apiCampusListPagination()">
+                  <option *ngFor="let count of countElements;" [ngValue]="count">{{count}}</option>
+                </select> registros</label>
+              </div>
+            </div>
+            <!-- Search -->
+            <div class="col-sm-12 col-md-6">
+              <div id="tickets-table_filter" class="dataTables_filter text-md-end"><label
+                  class="d-inline-flex align-items-center">Buscar:
+                  <input type="search" name="searchTerm" class="form-control form-control-sm ms-2"
+                    aria-controls="tickets-table" [(ngModel)]="pagination.value.search" (input)="apiCampusListPagination()"></label>
+              </div>
+            </div>
+            <!-- End search -->
+          </div>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table align-middle dt-responsive nowrap w-100 table-check" id="type-document-list">
               <thead>
                 <tr>
-                  <th scope="col">N°</th>
-                  <th scope="col">País</th>
+                  <!-- <th scope="col">País</th> -->
                   <th scope="col">Nombre</th>
-                  <th scope="col">Ciudad</th>
+                  <th scope="col">Descripción</th>
                   <th scope="col">logo</th>
                   <th scope="col">Estado</th>
                   <th scope="col">Fecha creado</th>
@@ -34,21 +56,20 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of lists; let i = index">
-                  <th scope="row">{{i + 1}}</th>
-                  <td>{{data.paises_nombre}}</td>
+                  <!-- <td>{{data.paises_nombre}}</td> -->
                   <td>{{data.nombre}}</td>
-                  <td>{{data.ciudad}}</td>
-                  <td><img *ngIf="data.logo" [src]="'http://localhost:8000/files/campus/' + data.logo" alt="render" style="max-height: 80px;"></td>
-                  <td><span class="badge text-md" [ngClass]="{ 'bg-success': data.is_active == 1, 'bg-danger': data.is_active == 0}">{{data.is_active? 'Activo': 'Inactivo'}}</span></td>
-                  <td>{{data.created_at}}</td>
-                  <td>{{data.updated_at}}</td>
+                  <td>{{data.descripcion}}</td>
+                  <td><img *ngIf="data.logo" [src]="data.logo?.url" alt="render" style="max-height: 80px;"></td>
+                  <td><span class="badge text-md bg-info">{{data?.typeStatusId?.nombre}}</span></td>
+                  <td>{{data.createdAt | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                  <td>{{data.updatedAt | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
                   <td>
                     <ul class="list-unstyled hstack gap-1 mb-0">
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data.id,content)"><i class="mdi mdi-pencil-outline"></i></a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data,content)"><i class="mdi mdi-pencil-outline"></i></a>
                       </li>
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                        <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteRow(data.id)"><i class="mdi mdi-delete-outline"></i></a>
+                        <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteRow(data._id)"><i class="mdi mdi-delete-outline"></i></a>
                       </li>
                     </ul>
                   </td>
@@ -58,6 +79,36 @@
             </table>
           </div>
 
+          <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                Mostrando de 
+                <b>{{pagination.value.limit * (pagination.value.page - 1) + 1}}</b> al
+                <b>{{pagination.value.limit * (pagination.value.page)}}</b> de <b>{{paginationResult.total}}</b>
+                registros
+              </div>
+            </div>
+            <!-- Pagination -->
+            <div class="col-sm-12 col-md-6">
+              <div class="text-md-right float-md-end pagination-rounded">
+                <pagination 
+                  previousText="Anterior" 
+                  nextText="Siguiente"   
+                  firstText="Primero"
+                  lastText="Ultimo"
+                  [boundaryLinks]="false" 
+                  [directionLinks]="true"  
+                  [totalItems]="paginationResult.total"
+                  [(ngModel)]="pagination.value.page" 
+                  [itemsPerPage]="pagination.value.limit" 
+                  (pageChanged)="getPage($event)" 
+                  [maxSize]="7" 
+                  [rotate]="false"
+                  ></pagination>
+              </div>
+            </div>
+            <!-- End Pagination -->
+          </div>
         </div>
       </div>
     </div>

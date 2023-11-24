@@ -41,7 +41,7 @@ export class Link extends Model{
 
 }
 
-export class Pagination extends Model{
+export class ResponsePagination extends Model{
   public total: number;
   public results: any[];
 
@@ -51,35 +51,11 @@ export class Pagination extends Model{
     this.results = this.results || [];
   }
 
-  public static cast(object: object): Pagination{
-    const obj = new Pagination(object);
+  public static cast(object: object): ResponsePagination{
+    const obj = new ResponsePagination(object);
     return {
       total: obj.total,
       results: obj.results,
     }
   }
-
-}
-
-
-export class ResponsePagination extends Model{
-  public code: number;
-  public status: string;
-  public message: string;
-  public data: Pagination | null;
-  public errors: any;
-
-  constructor(data?: object){
-    super(data);
-    this.code = this.code || 200;
-    this.status = this.status || '';
-    this.message = this.message || '';
-    this.data = this.data || null;
-    this.errors = this.errors || '';
-  }
-
-  public static cast(data: object): ResponseApi{
-    return new ResponseApi(data);
-  }
-
 }

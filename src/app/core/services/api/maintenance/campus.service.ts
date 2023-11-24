@@ -53,6 +53,11 @@ export class CampusService {
     }
   }
 
+  public getPagination(data: any): Observable<ResponseApi> {
+    const endpoint = `${this.baseUrl}/list`;
+    return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
+  }
+
   public getById(id: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/${id}`;
     return this.http.get(endpoint).pipe(map((res: ResponseApi) => res))
@@ -97,7 +102,7 @@ export class CampusService {
   // Método para modificar un objeto en el array
   updateObjectObserver(campusList: CampusList) {
     const currentData = this.listSubject.getValue();
-    const index = currentData.findIndex(item => item.id === campusList.id);
+    const index = currentData.findIndex(item => item._id === campusList._id);
     if (index !== -1) {
       currentData[index] = campusList;
       this.listSubject.next(currentData);
@@ -107,7 +112,7 @@ export class CampusService {
   // Método para quitar un objeto del array
   removeObjectObserver(id: any) {
     const currentData = this.listSubject.getValue();
-    const updatedData = currentData.filter(item => item.id !== id);
+    const updatedData = currentData.filter(item => item._id !== id);
     this.listSubject.next(updatedData);
   }
 }

@@ -23,7 +23,7 @@
               <div class="dataTables_length" id="tickets-table_length"><label
                 class="d-inline-flex align-items-center">Mostrar
                 <select name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
-                  [(ngModel)]="perPage" class="form-control form-control-sm mx-2" (change)="apiUserListPagination()">
+                  [(ngModel)]="pagination.value.limit" class="form-control form-control-sm mx-2" (change)="apiUserListPagination()">
                   <option *ngFor="let count of countElements;" [ngValue]="count">{{count}}</option>
                 </select> registros</label>
               </div>
@@ -33,7 +33,7 @@
               <div id="tickets-table_filter" class="dataTables_filter text-md-end"><label
                   class="d-inline-flex align-items-center">Buscar:
                   <input type="search" name="searchTerm" class="form-control form-control-sm ms-2"
-                    aria-controls="tickets-table" [(ngModel)]="search" (input)="apiUserListPagination()"></label>
+                    aria-controls="tickets-table" [(ngModel)]="pagination.value.search" (input)="apiUserListPagination()"></label>
               </div>
             </div>
             <!-- End search -->
@@ -54,8 +54,8 @@
                   <th scope="col">Nombres</th>
                   <th scope="col">Apellido paterno</th>
                   <th scope="col">Apellido materno</th>
-                  <th scope="col">nroDocumento</th>
-                  <th scope="col">N° nroDocumento</th>
+                  <th scope="col">Documento</th>
+                  <th scope="col">N° Documento</th>
                   <th scope="col">Usuario</th>
                   <th scope="col">Tipo de usuario</th>
                   <!-- <th scope="col">Fecha creado</th>
@@ -72,7 +72,7 @@
                     {{data?.personId?.typeDocumentId?.nombre}}
                   </td>
                   <td>
-                    {{data?.personId?.nronroDocumento}}
+                    {{data?.personId?.nroDocumento}}
                   </td>
                   <td>{{data.usuario}}</td>
                   <td>{{data.typeUserId?.nombre}}</td>
@@ -82,7 +82,7 @@
                   <td>
                     <ul class="list-unstyled hstack gap-1 mb-0">
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data._id,content)"><i class="mdi mdi-pencil-outline"></i></a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-soft-info" (click)="editDataGet(data, content)"><i class="mdi mdi-pencil-outline"></i></a>
                       </li>
                       <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                         <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteRow(data._id)"><i class="mdi mdi-delete-outline"></i></a>
@@ -100,8 +100,8 @@
             <div class="col-sm-12 col-md-6">
               <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
                 Mostrando de 
-                <!-- <b>{{pagination.from}}</b> al
-                <b>{{pagination.to}}</b> de <b>{{pagination.total}}</b> -->
+                <b>{{pagination.value.limit * (pagination.value.page - 1) + 1}}</b> al
+                <b>{{pagination.value.limit * (pagination.value.page)}}</b> de <b>{{paginationResult.total}}</b>
                 registros
               </div>
             </div>
@@ -115,9 +115,9 @@
                   lastText="Ultimo"
                   [boundaryLinks]="false" 
                   [directionLinks]="true"  
-                  [totalItems]="total"
-                  [(ngModel)]="page" 
-                  [itemsPerPage]="perPage" 
+                  [totalItems]="paginationResult.total"
+                  [(ngModel)]="pagination.value.page" 
+                  [itemsPerPage]="pagination.value.limit" 
                   (pageChanged)="getPage($event)" 
                   [maxSize]="7" 
                   [rotate]="false"
@@ -185,6 +185,8 @@
           </div>
         </div>
 
+      </div>
+      <div class="row g-2">
         <div class="col-lg-3 mb-3" *ngIf="'FORMS.FIELD_NAMES.gender.label' | translate as translatedLabel;">
           <label for="genero" class="form-label">{{translatedLabel}} *</label>
           <select class="form-select custom-select" id="genero" formControlName="genero" [ngClass]="{ 'is-invalid': f.genero.errors && (f.genero.dirty || f.genero.touched || submitted) }">
@@ -193,7 +195,7 @@
             <option value="F">Femenino</option>
             <option value="O">Otro</option>
           </select>
-
+  
           <!-- <input type="text" id="apellidoMaterno" class="form-control" placeholder="{{'FORMS.FIELD_NAMES.type_document.placeholder' | translate}}" formControlName="apellidoMaterno" [ngClass]="{ 'is-invalid': f.apellidoMaterno.errors && (f.apellidoMaterno.dirty || f.apellidoMaterno.touched || submitted) }" /> -->
           <div *ngIf="f.genero.errors && (f.genero.dirty || f.genero.touched || submitted)" class="invalid-feedback" align="left">
             <div *ngIf="f.genero.errors.required">
@@ -201,9 +203,7 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row g-2">
-        <div class="col-md-7 mb-3" *ngIf="'FORMS.FIELD_NAMES.type_document.label' | translate as translatedLabel;">
+        <div class="col-lg-5 mb-3" *ngIf="'FORMS.FIELD_NAMES.type_document.label' | translate as translatedLabel;">
           <label for="typeDocumentId" class="form-label">{{translatedLabel}} *</label>
           <select class="form-select custom-select" id="typeDocumentId" formControlName="typeDocumentId" [ngClass]="{ 'is-invalid': f.typeDocumentId.errors && (f.typeDocumentId.dirty || f.typeDocumentId.touched || submitted) }">
             <option value="">{{'FORMS.FIELD_NAMES.type_document.default_option' | translate}}</option>
@@ -215,7 +215,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5 mb-3" *ngIf="'FORMS.FIELD_NAMES.document.label' | translate as translatedLabel;">
+        <div class="col-lg-4 mb-3" *ngIf="'FORMS.FIELD_NAMES.document.label' | translate as translatedLabel;">
           <label for="nroDocumento" class="form-label">{{translatedLabel}} *</label>
           <input type="text" maxlength="11" id="nroDocumento" class="form-control" placeholder="{{'FORMS.FIELD_NAMES.document.placeholder' | translate}}" formControlName="nroDocumento" [ngClass]="{ 'is-invalid': f.nroDocumento.errors && (f.nroDocumento.dirty || f.nroDocumento.touched || submitted) }" />
           <div *ngIf="f.nroDocumento.errors && (f.nroDocumento.dirty || f.nroDocumento.touched || submitted)" class="invalid-feedback" align="left">

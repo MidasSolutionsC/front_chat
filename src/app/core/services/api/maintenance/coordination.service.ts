@@ -1,33 +1,24 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, distinctUntilChanged, map, of } from 'rxjs';
+import { CoordinationList, ResponseApi } from 'src/app/core/models';
 import { ConfigService } from '../../config';
-import { BehaviorSubject, Observable, Subscription, catchError, distinctUntilChanged, map, of } from 'rxjs';
-import { ResponseApi } from '../../../models/api/response-api.model';
-import { TypeDocumentList } from '../../../models';
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class TypeDocumentService {
-  // private cachedData: User[]; // Almacena los datos en caché
+export class CoordinationService {
   private cachedData: ResponseApi; // Almacena los datos en caché
-  private typeDocumentsSubject: BehaviorSubject<TypeDocumentList[]> = new BehaviorSubject<TypeDocumentList[]>([]);
-  public typeDocuments$: Observable<TypeDocumentList[]> = this.typeDocumentsSubject.asObservable();
+  private listSubject: BehaviorSubject<CoordinationList[]> = new BehaviorSubject<CoordinationList[]>([]);
+  public listObserver$: Observable<CoordinationList[]> = this.listSubject.asObservable();
   
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
-
   constructor(
     private http: HttpClient,
     private configService: ConfigService
   ) { 
-    this.typeDocuments$
+    this.listObserver$
       .pipe(distinctUntilChanged())
-      .subscribe((list: TypeDocumentList[]) => {
+      .subscribe((list: CoordinationList[]) => {
         if(this.cachedData){
           this.cachedData.data = list;
         }
@@ -36,17 +27,12 @@ export class TypeDocumentService {
 
 
   private get baseUrl(){
-    return this.configService.apiUrl + 'type-document';
+    return this.configService.apiUrl + 'coordination';
   }
 
   private get requestOptions(){
     return this.configService.requestOptions;
   }
-
-  // public getAll(): Observable<any> {
-  //   const endpoint = `${this.baseUrl}`;
-  //   return this.http.get(endpoint).pipe(map((res: any) => res));
-  // }
 
   /**
    * Listar todos los registros
@@ -67,12 +53,10 @@ export class TypeDocumentService {
     }
   }
 
-  
   public getPagination(data: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/list`;
     return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
-
 
   public getById(id: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/${id}`;
@@ -80,12 +64,12 @@ export class TypeDocumentService {
   }
 
   public register(data: any): Observable<ResponseApi>{
-    const endpoint = `${this.baseUrl}`;
+    const endpoint = `${this.baseUrl}/register`;
     return this.http.post(endpoint, data, this.requestOptions).pipe(map((res: ResponseApi) => res))
   }
 
   public update(data: any, id: any): Observable<ResponseApi>{
-    const endpoint = `${this.baseUrl}/${id}`;
+    const endpoint = `${this.baseUrl}/update/${id}`;
     return this.http.put(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
 
@@ -104,32 +88,31 @@ export class TypeDocumentService {
    * FUNCIONES PARA LOS OBSERVABLES
    */
   // Método para agregar un nuevo objeto al array
-  addObjectObserver(typeDocument: TypeDocumentList) {
-    const currentData = this.typeDocumentsSubject.getValue();
-    currentData.push(typeDocument);
-    this.typeDocumentsSubject.next(currentData);
+  addObjectObserver(coordinationList: CoordinationList) {
+    const currentData = this.listSubject.getValue();
+    currentData.push(coordinationList);
+    this.listSubject.next(currentData);
   }
 
   // Método para actualizar todo el array
-  addArrayObserver(typeDocuments: TypeDocumentList[]) {
-    this.typeDocumentsSubject.next(typeDocuments);
+  addArrayObserver(coordinationList: CoordinationList[]) {
+    this.listSubject.next(coordinationList);
   }
 
   // Método para modificar un objeto en el array
-  updateObjectObserver(updatedTypeDocument: TypeDocumentList) {
-    const currentData = this.typeDocumentsSubject.getValue();
-    const index = currentData.findIndex(item => item._id === updatedTypeDocument._id);
+  updateObjectObserver(coordinationList: CoordinationList) {
+    const currentData = this.listSubject.getValue();
+    const index = currentData.findIndex(item => item._id === coordinationList._id);
     if (index !== -1) {
-      currentData[index] = updatedTypeDocument;
-      this.typeDocumentsSubject.next(currentData);
+      currentData[index] = coordinationList;
+      this.listSubject.next(currentData);
     }
   }
 
   // Método para quitar un objeto del array
   removeObjectObserver(id: any) {
-    const currentData = this.typeDocumentsSubject.getValue();
+    const currentData = this.listSubject.getValue();
     const updatedData = currentData.filter(item => item._id !== id);
-    this.typeDocumentsSubject.next(updatedData);
+    this.listSubject.next(updatedData);
   }
-  
 }

@@ -258,7 +258,7 @@ export class CallComponent {
         order: this.order
       })
       .pipe(debounceTime(250))
-      .subscribe((response: ResponsePagination) => {
+      .subscribe((response: ResponseApi) => {
         if(response.code == 200){
           this.pagination = Pagination.cast(response.data);
           // this.lists = response.data.data;
