@@ -5,7 +5,7 @@ export class Coordination extends Model{
   public _id: string;
   public nombre: string;
   public descripcion: string;
-  public campusId: string;
+  public campusId: any;
   public integrantes: any[];
   public typeStatusId: string;
   // public createdUserId?: string;
@@ -47,6 +47,7 @@ export class CoordinationList extends Model{
   public _id: string;
   public nombre: string;
   public descripcion: string;
+  public countryId?: any;
   public campusId: any;
   public integrantes: any[];
   public typeStatusId: any;
@@ -62,6 +63,7 @@ export class CoordinationList extends Model{
     this._id = this._id || null;
     this.nombre = this.nombre || null;
     this.descripcion = this.descripcion || null;
+    this.countryId = this.countryId || null;
     this.campusId = this.campusId || null;
     this.typeStatusId = this.typeStatusId || null;
     this.integrantes = this.integrantes || [];
@@ -73,6 +75,7 @@ export class CoordinationList extends Model{
       _id: obj._id,
       nombre: obj.nombre,
       descripcion: obj.descripcion,
+      countryId: obj.countryId,
       campusId: obj.campusId,
       integrantes: obj.integrantes,
       typeStatusId: obj.typeStatusId,

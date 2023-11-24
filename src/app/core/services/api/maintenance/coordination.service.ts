@@ -58,6 +58,11 @@ export class CoordinationService {
     return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
 
+  public getMembers(id: any): Observable<ResponseApi> {
+    const endpoint = `${this.baseUrl}/get-members/${id}`;
+    return this.http.post(endpoint, null).pipe(map((res: ResponseApi) => res))
+  }
+
   public getById(id: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/${id}`;
     return this.http.get(endpoint).pipe(map((res: ResponseApi) => res))

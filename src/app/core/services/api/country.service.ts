@@ -97,7 +97,7 @@ export class CountryService {
   // Método para modificar un objeto en el array
   updateObjectObserver(countryList: CountryList) {
     const currentData = this.listSubject.getValue();
-    const index = currentData.findIndex(item => item.id === countryList.id);
+    const index = currentData.findIndex(item => item._id === countryList._id);
     if (index !== -1) {
       currentData[index] = countryList;
       this.listSubject.next(currentData);
@@ -107,7 +107,7 @@ export class CountryService {
   // Método para quitar un objeto del array
   removeObjectObserver(id: any) {
     const currentData = this.listSubject.getValue();
-    const updatedData = currentData.filter(item => item.id !== id);
+    const updatedData = currentData.filter(item => item._id !== id);
     this.listSubject.next(updatedData);
   }
 }

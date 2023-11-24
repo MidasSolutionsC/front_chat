@@ -2,23 +2,39 @@ import { IdentificationDocumentList } from "../identification-document.model";
 import { Model } from "../model";
 
 export class Member extends Model{
-  public id: number;
-  public grupos_id: number;
-  public usuarios_id: number;
-  public is_active: boolean;
+  public _id: string;
+  public codigo: string;
+  public nombres: string;
+  public apellidoPaterno: string;
+  public apellidoMaterno: string;
+  public personId: string;
+  public userId: string;
+  public typeStatusId: string;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
-    this.grupos_id = this.grupos_id || 0;
-    this.usuarios_id = this.usuarios_id || 0;
-    this.is_active = this.is_active || true;
+    this._id = this._id || null;
+    this.codigo = this.codigo || null;
+    this.nombres = this.nombres || null;
+    this.apellidoPaterno = this.apellidoPaterno || null;
+    this.apellidoMaterno = this.apellidoMaterno || null;
+    this.personId = this.personId || null;
+    this.userId = this.userId || null;
+    this.typeStatusId = this.typeStatusId || null;
   }
 
   public static cast(data: object): Member{
     const member = new Member(data);
-    const {id, grupos_id, usuarios_id, is_active} = member;
-    return {id, grupos_id, usuarios_id, is_active};
+    return {
+      _id: member._id,
+      codigo: member.codigo,
+      nombres: member.nombres,
+      apellidoPaterno: member.apellidoPaterno,
+      apellidoMaterno: member.apellidoMaterno,
+      personId: member.personId,
+      userId: member.userId,
+      typeStatusId: member.typeStatusId
+    }
   }
 
   public static casts(dataArray: object[]): Member[]{
@@ -27,61 +43,58 @@ export class Member extends Model{
 }
 
 export class MemberList extends Model{
-  public id: number;
-  public grupos_id: number;
-  public usuarios_id: number;
+  public _id: string;
+  public codigo: string;
   public nombres: string;
-  public apellido_paterno: string;
-  public apellido_materno: string;
-  public paises_id: number;
-  public personas_id: number;
-  public tipo_usuarios_id: number;
-  public tipo_documentos_id: number;
-  public paises_nombre: string;
-  public tipo_usuarios_nombre: string;
-  public tipo_documentos_abreviacion: string;
-  public documento: string;
-  public nombre_usuario: string;
-  public is_active: boolean;
-  public user_create_id: number;
-  public user_update_id: number;
-  public user_delete_id: number;
-  public created_at: string;
-  public updated_at: string;
-  public deleted_at: string;
-  public identificaciones?: IdentificationDocumentList[];
+  public apellidoPaterno: string;
+  public apellidoMaterno: string;
+  public personId: any;
+  public userId: any;
+  public typeStatusId: any;
+  public createdUserId?: any;
+  public updatedUserId?: any;
+  public deletedUserId?: any;
+  public createdAt?: any;
+  public updatedAt?: any;
+  public deletedAt?: any;
 
   constructor(data?: object){
     super(data);
-    this.id = this.id || 0;
-    this.grupos_id = this.grupos_id || 0;
-    this.usuarios_id = this.usuarios_id || 0;
-    this.nombres = this.nombres || '';
-    this.apellido_paterno = this.apellido_paterno || '';
-    this.apellido_materno = this.apellido_materno || '';
-    this.paises_id = this.paises_id || 0;
-    this.personas_id = this.personas_id || 0;
-    this.tipo_usuarios_id = this.tipo_usuarios_id || 0;
-    this.tipo_documentos_id = this.tipo_documentos_id || 0;
-    this.paises_nombre = this.paises_nombre || '';
-    this.tipo_usuarios_nombre = this.tipo_usuarios_nombre || '';
-    this.tipo_documentos_abreviacion = this.tipo_documentos_abreviacion || '';
-    this.documento = this.documento || '';
-    this.nombre_usuario = this.nombre_usuario || '';
-    this.is_active = this.is_active || false;
-    this.user_create_id = this.user_create_id || 0;
-    this.user_update_id = this.user_update_id || 0;
-    this.user_delete_id = this.user_delete_id || 0;
-    this.created_at = this.created_at || '';
-    this.updated_at = this.updated_at || '';
-    this.deleted_at = this.deleted_at || '';
-    this.identificaciones = this.identificaciones || [];
+    this._id = this._id || null;
+    this.codigo = this.codigo || null;
+    this.nombres = this.nombres || null;
+    this.apellidoPaterno = this.apellidoPaterno || null;
+    this.apellidoMaterno = this.apellidoMaterno || null;
+    this.personId = this.personId || null;
+    this.userId = this.userId || null;
+    this.typeStatusId = this.typeStatusId || null;
+    this.createdUserId = this.createdUserId || null;
+    this.updatedUserId = this.updatedUserId || null;
+    this.deletedUserId = this.deletedUserId || null;
+    this.createdAt = this.createdAt || null;
+    this.updatedAt = this.updatedAt || null;
+    this.deletedAt = this.deletedAt || null;
   }
 
+
   public static cast(data: object): MemberList{
-    const memberList = new MemberList(data);
-    const { id, grupos_id, usuarios_id, nombres, apellido_paterno, apellido_materno, paises_id, personas_id, tipo_usuarios_id, tipo_documentos_id, paises_nombre, tipo_usuarios_nombre, tipo_documentos_abreviacion, documento, nombre_usuario, is_active, user_create_id, user_update_id, user_delete_id, created_at, updated_at, deleted_at, identificaciones } = memberList;
-    return {id, grupos_id, usuarios_id, nombres, apellido_paterno, apellido_materno, paises_id, personas_id, tipo_usuarios_id, tipo_documentos_id, paises_nombre, tipo_usuarios_nombre, tipo_documentos_abreviacion, documento, nombre_usuario, is_active, user_create_id, user_update_id, user_delete_id, created_at, updated_at, deleted_at, identificaciones};
+    const member = new MemberList(data);
+    return {
+      _id: member._id,
+      codigo: member.codigo,
+      nombres: member.nombres,
+      apellidoPaterno: member.apellidoPaterno,
+      apellidoMaterno: member.apellidoMaterno,
+      personId: member.personId,
+      userId: member.userId,
+      typeStatusId: member.typeStatusId,
+      createdUserId: member.createdUserId,
+      updatedUserId: member.updatedUserId,
+      deletedUserId: member.deletedUserId,
+      createdAt: member.createdAt,
+      updatedAt: member.updatedAt,
+      deletedAt: member.deletedAt,
+    }
   }
 
   public static casts(dataArray: object[]): MemberList[]{

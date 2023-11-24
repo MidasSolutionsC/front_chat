@@ -102,7 +102,7 @@ export class MemberService {
   // Método para modificar un objeto en el array
   updateObjectObserver(memberList: MemberList) {
     const currentData = this.listSubject.getValue();
-    const index = currentData.findIndex(item => item.id === memberList.id);
+    const index = currentData.findIndex(item => item._id === memberList._id);
     if (index !== -1) {
       currentData[index] = memberList;
       this.listSubject.next(currentData);
@@ -112,7 +112,7 @@ export class MemberService {
   // Método para quitar un objeto del array
   removeObjectObserver(id: any) {
     const currentData = this.listSubject.getValue();
-    const updatedData = currentData.filter(item => item.id !== id);
+    const updatedData = currentData.filter(item => item._id !== id);
     this.listSubject.next(updatedData);
   }
 }

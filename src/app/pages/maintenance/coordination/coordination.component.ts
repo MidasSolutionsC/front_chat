@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ExportAsConfig, ExportAsService, SupportedExtensions } from 'ngx-export-as';
 import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
-import { Breadcrumb, CampusList, Coordination, CoordinationList, MemberList, Pagination, PaginationResult, ResponseApi, TypeDocumentList, UserPersonList } from 'src/app/core/models';
-import { ApiErrorFormattingService, CampusService, CoordinationService, FormService, SweetAlertService, TypeDocumentService, UserService } from 'src/app/core/services';
+import { Breadcrumb, CampusList, Coordination, CoordinationList, MemberList, Pagination, PaginationResult, ResponseApi, TypeDocumentList, UserList, UserPersonList } from 'src/app/core/models';
+import { ApiErrorFormattingService, CampusService, CoordinationService, CountryService, FormService, SweetAlertService, TypeDocumentService, UserService } from 'src/app/core/services';
 import { ModalDetailComponent } from './modals/modal-detail/modal-detail.component';
 
 @Component({
@@ -99,11 +99,11 @@ export class CoordinationComponent implements OnInit, OnDestroy {
   loadingDataUsers: boolean = false;
   asyncUsers: Observable<UserPersonList[]>;
   listUsers?: UserPersonList[];
-  listUserSelected?: UserPersonList[] = [];
+  listUserSelected?: UserList[] = [];
   listUserSelectedId?: any[] = [];
 
   // USUARIO - NGX DATA TABLE
-  userRows: any[] = [];
+  userRows: UserList[] = [];
   // userColumns: any[] = [];
   userOffset: number = 0;
   userCount: number = 3;
@@ -167,7 +167,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
 
     // PAGINACIÓN DATA TABLE
     this.apiCoordinationListPagination();
-    // this.apiUserListPagination();
+    this.apiUserListPagination();
 
     // Tipo de documentos
     this.subscription.add(
@@ -197,6 +197,15 @@ export class CoordinationComponent implements OnInit, OnDestroy {
         // .pipe(distinctUntilChanged())
         .subscribe((pagination: Pagination) => {
           this.apiCoordinationListPagination()
+        })
+    );
+
+    // PAGINACIÓN USUARIO
+    this.subscription.add(
+      this.paginationUser.asObservable()
+        // .pipe(distinctUntilChanged())
+        .subscribe((pagination: Pagination) => {
+          this.apiUserListPagination()
         })
     );
     
@@ -421,6 +430,28 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     });
   }
 
+  // OBTENER INTEGRANTES
+  private apiCoordinationListMembers(id: string){
+    this._sweetAlertService.loadingUp('Obteniendo datos')
+    this._coordinationService.getMembers(id).subscribe((response: ResponseApi) => {
+      this._sweetAlertService.stop();
+      if (response.code == 200) {
+        this.listMembers = response.data?.integrantes;
+      }
+
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
+        }
+      }
+    }, (error: any) => {
+      this._sweetAlertService.stop();
+      if (error.message) {
+        this._sweetAlertService.showTopEnd({ type: 'error', title: 'Error', message: error.message, timer: 2500 });
+      }
+    });
+  }
+
 
   /**
    * ****************************************************************
@@ -511,6 +542,34 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Buscar SEDES
+  public apiCampusSearch(search: string) {
+    this._campusService.getSearch({ search }).subscribe((response: ResponseApi) => {
+      this._sweetAlertService.stop();
+      if (response.code == 200) {
+        this.listCampus = response.data.results;
+      }
+
+      if (response.code == 500) {
+        if (response.errors) {
+          this._sweetAlertService.showTopEnd({ type: 'error', title: response.errors?.message, message: response.errors?.error });
+        }
+      }
+    }, (error: any) => {
+      this._sweetAlertService.stop();
+      console.log(error);
+    });
+  }
+  
+
+  // AUTOCOMPLETE DE SEDES
+  onSelectCampus(selectedItem: any) {
+    // console.log("SEDE SELECCIONADO:", selectedItem)
+
+    // const datosForm = this.coordinationForm.getRawValue()
+    // console.log(datosForm)
+  }
+
   // Obtener lista de integrantes
   // public apiMemberListByCoordination(CoordinationId: number){
   //   this._sweetAlertService.loadingUp('Obteniendo datos de integrantes')
@@ -544,15 +603,8 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this._userService.getPagination(this.paginationUser.getValue()).pipe(debounceTime(250)).subscribe((response: ResponseApi) => {
         if (response.code == 200) {
-          this.paginationResult = PaginationResult.cast(response.data);
-          this.userRows = response.data.results;
-          // this.pagination = Pagination.cast(response.data);
-          // this.asyncUsers = of(this.pagination.data);
-          // this.page = response.data.current_page;
-          // this.total = response.data.total;
-          // // this.listUsers = this.pagination.data;
-
-          // this.userRows = response.data.data;
+          this.paginationResultUser = PaginationResult.cast(response.data);
+          this.listUsers = response.data.results;
         }
 
         if (response.code == 500) {
@@ -590,8 +642,8 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     } else {
       // this.listUserSelected = this.pagination.data.map((obj: any) => obj);
 
-      this.listUserSelected = this.paginationResult.results.map((obj: any) => {
-        if (!this.listMembers.some((member) => member.usuarios_id == obj.id)) {
+      this.listUserSelected = this.paginationResultUser.results.map((obj: UserList) => {
+        if (!this.listMembers.some((member) => member.userId == obj._id)) {
           return obj;
         }
         return null; // Retorna null para los elementos que ya existen 
@@ -608,7 +660,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
    * Activar o desactivar / usuario agregado
    * @param id id del usuario
    */
-  toggleSelection(data: UserPersonList) {
+  toggleSelection(data: UserList) {
     const index = this.listUserSelected.findIndex((item) => item._id === data._id);
     if (index === -1) {
       this.listUserSelected.push(data); // Agregar el ID si no está en la lista
@@ -644,7 +696,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
    * @returns 
    */
   getRowIsMember(id: any) {
-    return this.listMembers.some((item) => item.usuarios_id === id);
+    return this.listMembers.some((item) => item.userId === id);
   }
 
 
@@ -656,13 +708,13 @@ export class CoordinationComponent implements OnInit, OnDestroy {
    */
   deleteMemberUser(memberId: number) {
     // Buscar en el array de nuevos integrantes
-    const member = this.listMembers.find((member) => member.id === memberId);
+    const member = this.listMembers.find((member) => member.userId === memberId);
 
     if (member) {
       this._sweetAlertService.showConfirmationAlert('¿Estas seguro de eliminar al integrante?').then((confirm) => {
         if (confirm.isConfirmed) {
-          this.listMemberIdDeleted.push(member.id);
-          this.listMembers = this.listMembers.filter((item) => item.id !== member.id);
+          this.listMemberIdDeleted.push(member.userId);
+          this.listMembers = this.listMembers.filter((item) => item.userId !== member.userId);
         }
       });
     }
@@ -721,8 +773,8 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     return {
       ...this._formService.modelToFormGroupData(model),
       nombre: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-      camopusId: ['', [Validators.required, Validators.min(0)]],
-      descripcion: ['', [Validators.nullValidator, Validators.maxLength(500)]],
+      campusId: ['', [Validators.required, Validators.min(0)]],
+      descripcion: [null, [Validators.nullValidator, Validators.maxLength(500)]],
     }
   }
 
@@ -737,7 +789,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
   private initFormUserSearch() {
     this.userSearchForm = this.formBuilder.group({
       typeDocumentId: ['', [Validators.nullValidator, Validators.min(0)]],
-      documento: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
+      nroDocumento: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(11)]],
       search: ['', [Validators.nullValidator]],
     });
   }
@@ -771,8 +823,19 @@ export class CoordinationComponent implements OnInit, OnDestroy {
       this._sweetAlertService.showTopEnd({ title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500 });
     } else {
       const values: Coordination = this.coordinationForm.value;
-      values.integrantes = this.listUserSelectedId;
 
+      const integrantes = this.listUserSelected.map((item) => {
+        return {
+          nombres: item.personId?.nombres,
+          apellidoPaterno: item.personId?.apellidoPaterno,
+          apellidoMaterno: item.personId?.apellidoMaterno,
+          personId: item.personId?._id,
+          userId: item._id,
+        }
+      })
+
+      values.integrantes = integrantes;
+      delete values._id;
 
       if (this.isNewData) {
         if (values?.integrantes.length <= 0) {
@@ -780,7 +843,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
           return;
         }
         // Crear nuevo registro
-        this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar el grupo?').then((confirm) => {
+        this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar la coordinación?').then((confirm) => {
           if (confirm.isConfirmed) {
             this.saveDataApi(values);
           }
@@ -810,14 +873,21 @@ export class CoordinationComponent implements OnInit, OnDestroy {
 
     // Cargando datos al formulario 
     const coordination = Coordination.cast(data);
+    coordination.integrantes = this.listMembers
+
+    this.apiCampusSearch(coordination?.campusId?.nombre)
 
     this.coordinationForm = this.formBuilder.group({
       ...this._formService.modelToFormGroupData(coordination), 
       _id: [data._id]
     });
 
+    setTimeout(() => {
+      this.f.campusId.setValue(coordination.campusId?._id);
+    }, 250);
+
     // Obtener los integrantes del grupo
-    // this.apiMemberListByCoordination(coordination._id);
+    this.apiCoordinationListMembers(coordination._id);
   }
 
 

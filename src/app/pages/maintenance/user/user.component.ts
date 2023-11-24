@@ -140,7 +140,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .pipe(distinctUntilChanged())
       .pipe(
         distinctUntilChanged((prevList, currentList) =>
-            prevList.map(item => item.id).join(',') === currentList.map(item => item.id).join(',')
+            prevList.map(item => item._id).join(',') === currentList.map(item => item._id).join(',')
             )
           )
           .subscribe((list: CountryList[]) => {

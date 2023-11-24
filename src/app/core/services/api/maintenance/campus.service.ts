@@ -58,6 +58,11 @@ export class CampusService {
     return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
   }
 
+  public getSearch(data: any): Observable<ResponseApi> {
+    const endpoint = `${this.baseUrl}/search`;
+    return this.http.post(endpoint, data).pipe(map((res: ResponseApi) => res))
+  }
+
   public getById(id: any): Observable<ResponseApi> {
     const endpoint = `${this.baseUrl}/${id}`;
     return this.http.get(endpoint).pipe(map((res: ResponseApi) => res))
