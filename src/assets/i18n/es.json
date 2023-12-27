@@ -99,9 +99,16 @@
       "TEXT": "Calendario",
       "BADGE": "01"
     },
+    "RECENT": {
+      "TEXT": "Recientes",
+      "BADGE": "Nueva"
+    },
     "CHAT": {
       "TEXT": "Chats",
       "BADGE": "Nueva"
+    },
+    "CHATS": {
+      "TEXT": "Chats"
     },
     "FILEMANAGER": {
       "TEXT": "Administradora de archivos",
@@ -137,6 +144,12 @@
         "KANBAN": "Kanban Board",
         "CREATETASK": "Crear tarea"
       }
+    },
+    "COORDINATIONS": {
+      "TEXT": "Coordinaciones"
+    },
+    "GROUPS": {
+      "TEXT": "Grupos"
     },
     "CONTACTS": {
       "TEXT": "Contactos",

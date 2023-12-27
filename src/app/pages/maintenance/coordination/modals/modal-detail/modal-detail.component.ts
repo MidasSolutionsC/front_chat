@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { Coordination, CoordinationList, MemberList, ResponseApi } from 'src/app/core/models';
@@ -9,18 +9,18 @@ import { ApiErrorFormattingService, FormService, CoordinationService, MemberServ
   templateUrl: './modal-detail.component.html',
   styleUrls: ['./modal-detail.component.scss']
 })
-export class ModalDetailComponent implements OnInit, OnDestroy{
+export class ModalDetailComponent implements OnInit, OnDestroy, OnChanges{
 
    // VALORES DE ENTRADA
   @Input() coordination: CoordinationList;
 
 
-  dataCoordination: CoordinationList = new CoordinationList();
-
   // DATOS DEL MODAL
   dataModal: any = {
-    title: 'Detalle de grupo'
+    title: 'Detalle de la coordinación'
   };
+  
+  dataCoordination: CoordinationList = new CoordinationList();
 
   // Integrantes
   listMembers: MemberList[] = [];
@@ -39,16 +39,27 @@ export class ModalDetailComponent implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {    
-    if(this.coordination){
-      // this.apiMemberListByCoordination(this.coordination._id);
-      this.dataCoordination = this.coordination;
-    }
+   this.onChangeData()
   }
 
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes.coordination && !changes.coordination.firstChange){
+      this.onChangeData()
+    }
+  }
+
+  onChangeData(){
+    if(this.coordination){
+      this.dataCoordination = this.coordination;
+      this.listMembers = this.coordination.integrantes;
+    }
+  }
+  
 
 
   closeModal(){

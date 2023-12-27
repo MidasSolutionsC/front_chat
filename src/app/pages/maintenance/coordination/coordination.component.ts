@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, Subscription, debounceTime, distinctUntilC
 import { Breadcrumb, CampusList, Coordination, CoordinationList, MemberList, Pagination, PaginationResult, ResponseApi, TypeDocumentList, UserList, UserPersonList } from 'src/app/core/models';
 import { ApiErrorFormattingService, CampusService, CoordinationService, CountryService, FormService, SweetAlertService, TypeDocumentService, UserService } from 'src/app/core/services';
 import { ModalDetailComponent } from './modals/modal-detail/modal-detail.component';
+import ValidateMemberUtil from 'src/app/core/utils/memeber-validation.util';
 
 @Component({
   selector: 'app-coordination',
@@ -696,19 +697,16 @@ export class CoordinationComponent implements OnInit, OnDestroy {
    * @returns 
    */
   getRowIsMember(id: any) {
-    return this.listMembers.some((item) => item.userId === id);
+    return this.listMembers.some((item) => item.userId?._id === id);
   }
-
-
-
 
 
   /**
    * ELIMINAR USUARIO - MIEMBRO DEL GRUPO
    */
-  deleteMemberUser(memberId: number) {
+  deleteMemberUser(memberId: string) {
     // Buscar en el array de nuevos integrantes
-    const member = this.listMembers.find((member) => member.userId === memberId);
+    const member = this.listMembers.find((member) => member._id === memberId);
 
     if (member) {
       this._sweetAlertService.showConfirmationAlert('¿Estas seguro de eliminar al integrante?').then((confirm) => {
@@ -718,7 +716,6 @@ export class CoordinationComponent implements OnInit, OnDestroy {
         }
       });
     }
-
   }
 
   /**
@@ -744,6 +741,17 @@ export class CoordinationComponent implements OnInit, OnDestroy {
   get nameSede() {
     const campus = this.listCampus.find((item) => item._id === this.f.campusId.value);
     return campus.nombre;
+  }
+
+
+  // VALIDAR POR ROLES
+  validateMemberInCoordination(){
+    // const validateMember = ValidateMemberUtil.validateUsersByRoles(this.listUserSelected, {admin: {require: false, min: 1, max: 2}})
+    const validateMember = ValidateMemberUtil.validateUsersByRolesFull(this.listUserSelected, [
+      {field: 'typeUserId.nombre', value: 'desarrollador', require: false, min: 1, max: 2},
+    ])
+
+    console.log(this.listUserSelected, validateMember)
   }
 
 
@@ -803,7 +811,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
   openModal(content: any) {
     this.initForm();
     this.isNewData = true;
-    this.dataModal.title = 'Crear grupo';
+    this.dataModal.title = 'Crear coordinación';
     this.submitted = false;
     this.listMembers = [];
     this.listMemberIdDeleted = [];
@@ -823,6 +831,18 @@ export class CoordinationComponent implements OnInit, OnDestroy {
       this._sweetAlertService.showTopEnd({ title: 'Validación de datos', message: 'Campos obligatorios vacíos', type: 'warning', timer: 1500 });
     } else {
       const values: Coordination = this.coordinationForm.value;
+      let {_id: idCoordination, ...coordination} = values;
+
+      const integrantesRegistrados = this.listMembers.map((item) => {
+        return {
+          codigo: item.codigo,
+          nombres: item.nombres,
+          apellidoPaterno: item.apellidoPaterno,
+          apellidoMaterno: item.apellidoMaterno,
+          personId: item.personId?._id,
+          userId: item.userId?._id,
+        }
+      })
 
       const integrantes = this.listUserSelected.map((item) => {
         return {
@@ -834,26 +854,26 @@ export class CoordinationComponent implements OnInit, OnDestroy {
         }
       })
 
-      values.integrantes = integrantes;
-      delete values._id;
+      coordination.integrantes = [...integrantesRegistrados, ...integrantes];
 
       if (this.isNewData) {
-        if (values?.integrantes.length <= 0) {
+        if (coordination?.integrantes.length <= 0) {
           this._sweetAlertService.showTopEnd({ title: 'Validación de integrantes', message: 'No se encontró integrantes para crear el grupo', type: 'warning', timer: 1500 });
           return;
         }
         // Crear nuevo registro
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de registrar la coordinación?').then((confirm) => {
           if (confirm.isConfirmed) {
-            this.saveDataApi(values);
+            this.saveDataApi(coordination);
           }
         });
       } else {
-        values['integrantesEliminados'] = this.listMemberIdDeleted;
+        // values['integrantesEliminados'] = this.listMemberIdDeleted;
         // Actualizar datos
         this._sweetAlertService.showConfirmationAlert('¿Estas seguro de modificar el grupo?').then((confirm) => {
           if (confirm.isConfirmed) {
-            this.updateDataApi(values, values._id);
+            delete coordination.typeStatusId 
+            this.updateDataApi(coordination, idCoordination);
           }
         });
       }
@@ -868,12 +888,13 @@ export class CoordinationComponent implements OnInit, OnDestroy {
  */
   editDataGet(data: any, content: any) {
     this.openModal(content);
-    this.dataModal.title = 'Editar grupo';
+    this.dataModal.title = 'Editar coordinación';
     this.isNewData = false;
 
     // Cargando datos al formulario 
     const coordination = Coordination.cast(data);
-    coordination.integrantes = this.listMembers
+    // coordination.integrantes = this.listMembers
+    this.listMembers = coordination.integrantes;  // OBTENER LOS INTEGRANTES PREVIOS REGISTRADOS
 
     this.apiCampusSearch(coordination?.campusId?.nombre)
 
@@ -887,7 +908,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
     }, 250);
 
     // Obtener los integrantes del grupo
-    this.apiCoordinationListMembers(coordination._id);
+    // this.apiCoordinationListMembers(coordination._id);
   }
 
 
@@ -896,7 +917,7 @@ export class CoordinationComponent implements OnInit, OnDestroy {
    * @param id id del registro a eliminar
    */
   deleteRow(id: any) {
-    this._sweetAlertService.showConfirmationAlert('¿Estas seguro de eliminar el grupo?').then((confirm) => {
+    this._sweetAlertService.showConfirmationAlert('¿Estas seguro de eliminar la coordinación?').then((confirm) => {
       if (confirm.isConfirmed) {
         this.deleteDataApi(id);
       }

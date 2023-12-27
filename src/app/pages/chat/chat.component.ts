@@ -4,6 +4,7 @@ import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms
 import { ChatUser, ChatMessage } from './chat.model';
 
 import { chatData, chatMessagesData } from './data';
+import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-chat',
@@ -27,11 +28,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
   usermessage: string;
   emoji:any = '';
 
-  constructor(public formBuilder: UntypedFormBuilder) {
+  items: MenuItem[];
+
+
+  constructor(
+    public formBuilder: UntypedFormBuilder,
+    private messageService: MessageService
+    ) {
   }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'Skote' }, { label: 'Chat', active: true }];
+    this.breadCrumbItems = [{ label: 'MIDAS' }, { label: 'Chat', active: true }];
 
     this.formData = this.formBuilder.group({
       message: ['', [Validators.required]],
@@ -40,6 +47,36 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.onListScroll();
 
     this._fetchData();
+
+    this.items = [
+      {
+          icon: 'pi pi-pencil',
+          command: () => {
+              this.messageService.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
+          }
+      },
+      {
+          icon: 'pi pi-refresh',
+          command: () => {
+              this.messageService.add({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
+          }
+      },
+      {
+          icon: 'pi pi-trash',
+          command: () => {
+              this.messageService.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
+          }
+      },
+      {
+          icon: 'pi pi-upload',
+          routerLink: ['/fileupload']
+      },
+      {
+          icon: 'pi pi-external-link',
+          target:'_blank',
+          url: 'http://angular.io'
+      }
+  ];
   }
 
   ngAfterViewInit() {

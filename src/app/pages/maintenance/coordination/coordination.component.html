@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="card-body border-bottom">
-          <h4 class="card-title">Lista de grupos</h4>
+          <h4 class="card-title">Lista de coordinaciones</h4>
           <p class="card-sub-title">
             Los datos cargados en esta tabla son dinámicos
           </p>
@@ -148,7 +148,7 @@
       <cdk-step [stepControl]="coordinationForm" [optional]="false">
         <ng-template cdkStepLabel>
           <span class="number">1.</span>
-          <span>Grupo</span>
+          <span>Coordinación</span>
         </ng-template>
         <section *ngIf="cdkStepper.selectedIndex === 0">
           <form (keydown.enter)="$event.preventDefault()" [formGroup]="coordinationForm" autocomplete="off">
@@ -383,7 +383,7 @@
           </div>
           <ul class="list-inline wizard d-flex justify-content-end mb-0">
             <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary" cdkStepperPrevious>{{'FORMS.BUTTONS.PREV' | translate}}</button></li>
-            <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary" cdkStepperNext [disabled]="!listUserSelected.length">{{'FORMS.BUTTONS.NEXT' | translate}}</button></li>
+            <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary" (click)="validateMemberInCoordination()" cdkStepperNext [disabled]="!listUserSelected.length">{{'FORMS.BUTTONS.NEXT' | translate}}</button></li>
           </ul>
         </section>
       </cdk-step>
@@ -432,16 +432,16 @@
                   <tbody>
                     <tr *ngFor="let data of listMembers; let i = index">
                       <th scope="row">{{i + 1}}</th>
-                      <td>{{data.personId?.nombres}}</td>
-                      <td>{{data.personId?.apellidoPaterno}} {{data.personId?.apellidoMaterno}}</td>
+                      <td>{{data.nombres}}</td>
+                      <td>{{data.apellidoPaterno}} {{data.apellidoMaterno}}</td>
                       <td>{{data.personId?.typeDocumentId?.nombre}}</td>
-                      <td>{{data.personId?.nroDocumento}} {{data.personId?.apellidoMaterno}}</td>
-                      <td>{{data.usuario}}</td>
-                      <td>{{data.typeUserId?.nombre}}</td>
+                      <td>{{data.personId?.nroDocumento}}</td>
+                      <td>{{data.userId?.usuario}}</td>
+                      <td>{{data.userId?.typeUserId?.nombre}}</td>
                       <td>
                         <ul class="list-unstyled hstack gap-1 mb-0">
                           <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                            <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteMemberUser(data.id)"><i class="mdi mdi-delete-outline"></i></a>
+                            <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteMemberUser(data._id)"><i class="mdi mdi-delete-outline"></i></a>
                           </li>
                         </ul>
                       </td>
@@ -452,13 +452,13 @@
                       <td>{{data.personId?.nombres}}</td>
                       <td>{{data.personId?.apellidoPaterno}} {{data.personId?.apellidoMaterno}}</td>
                       <td>{{data.personId?.typeDocumentId?.nombre}}</td>
-                      <td>{{data.personId?.nroDocumento}} {{data.personId?.apellidoMaterno}}</td>
+                      <td>{{data.personId?.nroDocumento}}</td>
                       <td>{{data.usuario}}</td>
                       <td>{{data.typeUserId?.nombre}}</td>
                       <td>
                         <ul class="list-unstyled hstack gap-1 mb-0">
                           <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                            <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteUserSelected(data.id)"><i class="mdi mdi-delete-outline"></i></a>
+                            <a href="javascript:void(0);" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger" (click)="deleteUserSelected(data._id)"><i class="mdi mdi-delete-outline"></i></a>
                           </li>
                         </ul>
                       </td>

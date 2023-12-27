@@ -1,0 +1,18 @@
+<div class="d-flex">
+  <div class="flex-shrink-0 align-self-center me-3">
+    <i class="mdi mdi-circle text-{{data.color}} font-size-10"></i>
+  </div>
+  <div class="flex-shrink-0 align-self-center me-3" *ngIf="data.image">
+    <img src="{{ data.image }}" class="rounded-circle avatar-xs" alt="">
+  </div>
+  <div class="avatar-xs align-self-center me-3" *ngIf="!data.image">
+    <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
+      {{data.name.charAt(0)}}
+    </span>
+  </div>
+  <div class="flex-grow-1 overflow-hidden">
+    <h5 class="text-truncate font-size-14 mb-1">{{ data.name }}</h5>
+    <p class="text-truncate mb-0">{{ data.message }}</p>
+  </div>
+  <div class="font-size-11">{{ data.time }}</div>
+</div>

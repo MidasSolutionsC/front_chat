@@ -52,13 +52,22 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ContactsComponent } from './chat/components/contacts/contacts.component';
+import { CoordinationsComponent } from './chat/components/coordinations/coordinations.component';
+import { ChatsComponent } from './chat/components/chats/chats.component';
+import { GroupsComponent } from './chat/components/groups/groups.component';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 @NgModule({
   declarations: [
     CallComponent,
     AllowedIpComponent,
     ChatComponent,
-    ProfileComponent
+    ProfileComponent,
+    ContactsComponent,
+    CoordinationsComponent,
+    ChatsComponent,
+    GroupsComponent
   ],
   imports: [
     CoreModule,
@@ -106,7 +115,8 @@ import { ProfileComponent } from './profile/profile.component';
     // ExportAsModule,
     // DataTablesModule
     AccordionModule,
+    SpeedDialModule
   ],
-  providers: [BsDropdownConfig, provideNgxMask()]
+  providers: [BsDropdownConfig, provideNgxMask(), SpeedDialModule]
 })
 export class PagesModule { }

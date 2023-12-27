@@ -2,12 +2,12 @@ import { group } from "@angular/animations";
 import { Model } from "../model";
 
 export class Coordination extends Model{
-  public _id: string;
+  public _id?: string;
   public nombre: string;
   public descripcion: string;
   public campusId: any;
-  public integrantes: any[];
   public typeStatusId: string;
+  public integrantes: any[];
   // public createdUserId?: string;
   // public updatedUserId?: string;
   // public deletedUserId?: string;
